@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "PokemonBack.Battle": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

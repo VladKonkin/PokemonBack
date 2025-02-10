@@ -1,0 +1,48 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokemonBack.AppHost", "PokemonBack.AppHost\PokemonBack.AppHost.csproj", "{7F803802-FEA9-4C75-A214-D2CB01C74947}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokemonBack.ServiceDefaults", "PokemonBack.ServiceDefaults\PokemonBack.ServiceDefaults.csproj", "{A164B145-7A33-415C-A0EB-854ED84F8D86}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokemonBack.Battle", "PokemonBack.Battle\PokemonBack.Battle.csproj", "{87A090E8-BAD3-4549-93D5-A78628337CDB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A164B145-7A33-415C-A0EB-854ED84F8D86} = {A164B145-7A33-415C-A0EB-854ED84F8D86}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokemonBack.BotBattleAPI", "PokemonBack.BotBattleAPI\PokemonBack.BotBattleAPI.csproj", "{3F0DBA68-8850-4059-AFDA-EEB2F12972FE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{87A090E8-BAD3-4549-93D5-A78628337CDB} = {87A090E8-BAD3-4549-93D5-A78628337CDB}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7F803802-FEA9-4C75-A214-D2CB01C74947}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F803802-FEA9-4C75-A214-D2CB01C74947}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F803802-FEA9-4C75-A214-D2CB01C74947}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F803802-FEA9-4C75-A214-D2CB01C74947}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A164B145-7A33-415C-A0EB-854ED84F8D86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A164B145-7A33-415C-A0EB-854ED84F8D86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A164B145-7A33-415C-A0EB-854ED84F8D86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A164B145-7A33-415C-A0EB-854ED84F8D86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87A090E8-BAD3-4549-93D5-A78628337CDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87A090E8-BAD3-4549-93D5-A78628337CDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87A090E8-BAD3-4549-93D5-A78628337CDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87A090E8-BAD3-4549-93D5-A78628337CDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F0DBA68-8850-4059-AFDA-EEB2F12972FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F0DBA68-8850-4059-AFDA-EEB2F12972FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F0DBA68-8850-4059-AFDA-EEB2F12972FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F0DBA68-8850-4059-AFDA-EEB2F12972FE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8670B45-4923-47EC-93F3-A38550AA1180}
+	EndGlobalSection
+EndGlobal

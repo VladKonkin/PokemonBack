@@ -1,0 +1,6 @@
+@PokemonBack.BotBattleAPI_HostAddress = http://localhost:5186
+
+GET {{PokemonBack.BotBattleAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
