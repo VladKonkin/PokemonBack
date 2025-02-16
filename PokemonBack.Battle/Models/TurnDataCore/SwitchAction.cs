@@ -10,11 +10,15 @@ namespace PokemonBack.Battle.Models.TurnDataCore
 {
 	public class SwitchAction : TurnAction
 	{
-		public PokemonDTO NewPokemon { get; }
-
-		public SwitchAction(Guid pokemonId)
+		public PokemonDTO NewPokemon { get; private set; }
+		private Guid PokemonId { get; set; }
+		private BattleMember _battleMember;
+		public override BattleMember? BattleMember => _battleMember; 
+		public SwitchAction(Guid pokemonId,BattleMember battleMember)
 		{
-			NewPokemon = BattleMember.GetPokemonById(pokemonId);
+			PokemonId = pokemonId;
+			_battleMember = battleMember;
+			NewPokemon = _battleMember.GetPokemonById(pokemonId);
 		}
 
 		public override string Description => $"Покемон сменяется на {NewPokemon}";

@@ -25,7 +25,7 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 			StateLog = new BattleStartLog(_battle.FirstBattleMember.GetId(),
 				_battle.SecondBattleMember.GetId(),
 				_battle.Id);
-			_battle.OnStateChangeAction(StateLog);
+			_battle.OnStateChange(StateLog);
 			_battleStateMachine.SwitchState<BattlePokemonChooseState>();
         }
 

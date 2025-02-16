@@ -24,7 +24,7 @@ namespace PokemonBack.Battle.BattleMain
         public List<BattleRoom> ReadyBattles => _battleRoomList;
         public List<BattleSession> ActiveBattles => _activeBattleList;
         public Action<Guid, StateLogBase> BattleStateChanged;
-        public Action<Guid> OnBattleEnd;
+        public Action<BattleSession> OnBattleEnd;
         public BattleHandler(IServiceProvider serviceProvider)
         {
             _battleRoomList = new List<BattleRoom>();
@@ -37,6 +37,10 @@ namespace PokemonBack.Battle.BattleMain
 			//var test = _pokemonRepository.GetAllAsync<PokemonEntity>().Result;
 			return "test";
 		}
+        public BattleSession GetBattleById(Guid battleId)
+        {
+            return _activeBattleList.FirstOrDefault(b => b.Id == battleId);
+        }
         public async Task<BattleRoom> CreateBattleRoom(Guid userId)
         {
 			var battleUser = await CreateBattleMemberById(userId);
@@ -58,12 +62,7 @@ namespace PokemonBack.Battle.BattleMain
         }
         public async Task<BattleSession> ConnectToBattleRoom(Guid battleId,Guid userId)
         {
-			//var room = _battleRoomList.FirstOrDefault(r => r.BattleID == battleId);
-			//Console.WriteLine(room + " Room");
-			//Console.WriteLine(_battleRoomList.Count + " Count");
-			//var battleUser = await CreateBattleMemberById(userId);
-			//room.AddUser(battleUser);
-			//return CreateBattle(room);
+		
 			Console.WriteLine(_battleRoomList.Count + " Count (before search)");
 
 			var room = _battleRoomList.FirstOrDefault(r => r.BattleID == battleId);
@@ -96,7 +95,9 @@ namespace PokemonBack.Battle.BattleMain
             var battle = new BattleSession(battleRoom.BattleID, battleRoom.FirstBattleMember, battleRoom.SecondBattleMember);
 
             _activeBattleList.Add(battle);
-            return battle;
+            BattleSubscribe(battle);
+
+			return battle;
 		}
         private async Task<UserBattleMember> CreateBattleMemberById(Guid userId)
         {
@@ -106,6 +107,27 @@ namespace PokemonBack.Battle.BattleMain
 
 			var battleUser = new UserBattleMember(userDTO);
             return battleUser;
+		}
+        private void BattleSubscribe(BattleSession battleSession)
+        {
+            battleSession.OnStateChangeAction += BattleInfoInvoke;
+            battleSession.OnBattleEndAction += BattleEnd;
+		}
+        private void BattleUnSubscribe(BattleSession battleSession) 
+        {
+			battleSession.OnStateChangeAction -= BattleInfoInvoke;
+			battleSession.OnBattleEndAction -= BattleEnd;
+		}
+        private void BattleInfoInvoke(Guid battleId,StateLogBase stateLogBase)
+        {
+            Console.WriteLine("BattleHandler BattleInfoInvoke");
+            BattleStateChanged?.Invoke(battleId, stateLogBase);
+		}
+        private void BattleEnd(BattleSession battleSession)
+        {
+            _activeBattleList.Remove(battleSession);
+			BattleUnSubscribe(battleSession);
+
 		}
 
     }

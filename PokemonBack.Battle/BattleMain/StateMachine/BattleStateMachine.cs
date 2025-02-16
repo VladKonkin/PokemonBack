@@ -27,6 +27,7 @@ namespace PokemonBack.Battle.BattleMain.StateMachine
 				new BattleEndState(this,_batle)
 
 			};
+			SwitchState<BattleStartState>();
         }
         public void SwitchState<T>() where T : BattleStateBase
 		{
@@ -37,7 +38,7 @@ namespace PokemonBack.Battle.BattleMain.StateMachine
 		}
 		private void SetStateLog()
 		{
-			_batle.BattleLoger.AddStateLog(_activeState.StateLog);
+			_batle?.BattleLoger?.AddStateLog(_activeState?.StateLog);
 		}
 	}
 }

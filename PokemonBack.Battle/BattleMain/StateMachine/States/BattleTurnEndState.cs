@@ -21,7 +21,7 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 		public override void OnStart()
 		{
 			StateLog = new TurnEndLog(_battle.TurnNumber);
-			_battle.OnStateChangeAction(StateLog);
+			_battle.OnStateChange(StateLog);
 
 			_battle.OnTurnEnd();
 			_battleStateMachine.SwitchState<BattleTurnStartState>();

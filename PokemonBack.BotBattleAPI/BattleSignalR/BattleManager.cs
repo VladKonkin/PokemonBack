@@ -28,18 +28,21 @@ namespace PokemonBack.BotBattleAPI.BattleSignalR
 		}
 		public void RegisterBattle(Guid battleId, IClientProxy clients)
 		{
-			if (!_clients.ContainsKey(battleId))
+            Console.WriteLine("BattleRegister");
+            if (!_clients.ContainsKey(battleId))
 			{
+				Console.WriteLine("BattleRegisterIf");
 				_clients[battleId] = clients;
 			}
 		}
 		private void BattleStateChanged(Guid battleId,StateLogBase stateLog)
 		{
-			_clients[battleId].SendAsync("StateChanged",stateLog);
+            Console.WriteLine("BattleStateChanged: " + battleId + " " + stateLog);
+            _clients[battleId].SendAsync("StateChanged",stateLog);
 		}
-		private void UnregisterBattle(Guid battleId)
+		private void UnregisterBattle(BattleSession battle)
 		{
-			_clients.Remove(battleId);
+			_clients.Remove(battle.Id);
 		}
 
 		public void Dispose()

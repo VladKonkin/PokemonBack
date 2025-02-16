@@ -22,7 +22,7 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 		public override void OnStart()
         {
 			StateLog = new TurnStartLog(_battle.TurnNumber);
-			_battle.OnStateChangeAction(StateLog);
+			_battle.OnStateChange(StateLog);
 
 			BattleMemberActionSubscribe();
         }

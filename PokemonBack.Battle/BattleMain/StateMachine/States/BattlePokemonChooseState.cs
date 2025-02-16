@@ -28,6 +28,7 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 		public override void OnStop()
 		{
 			StateLog = new ChoosePokemonLog(_battle.FirstBattleMember.GetId(), _battle.FirstBattleMember.ActivePokemon.Id, _battle.SecondBattleMember.GetId(), _battle.SecondBattleMember.ActivePokemon.Id);
+			_battle.OnStateChange(StateLog);
 			BattleMemberActionUnSubscribe();
 		}
 		private void PokemonReadyCheck()
@@ -36,7 +37,7 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 			{
 				_battle.FirstBattleMember.MakeMove();
 				_battle.SecondBattleMember.MakeMove();
-
+				
 				_battleStateMachine.SwitchState<BattleTurnStartState>();
 			}
 		}

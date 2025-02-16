@@ -25,7 +25,7 @@ namespace PokemonBack.BotBattleAPI.BattleSignalR
 
 
 
-			await Clients.Group(battleId.ToString()).SendAsync("Connect", battle);
+			await Clients.Group(battleId.ToString()).SendAsync("Connect", battle.FirstBattleMember.GetId(),battle.SecondBattleMember.GetId());
         }
         public async Task CreateBattleRoom(Guid userId)
         {
@@ -61,7 +61,7 @@ namespace PokemonBack.BotBattleAPI.BattleSignalR
 
                 Guid pokemonId = (Guid)moveRequest.NewPokemonId;
 
-				var switchData = new TurnData(new SwitchAction(pokemonId));
+				var switchData = new TurnData(new SwitchAction(pokemonId, battleMember));
 
                 battleMember.SetTurnData(switchData);
             }

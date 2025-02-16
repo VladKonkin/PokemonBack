@@ -38,6 +38,19 @@ namespace PokemonBack.BotBattleAPI.Controllers
 			}
 			return Ok(_battleHandler.Test());
 		}
+		[HttpGet("GetBattleInfoById")]
+		public IActionResult GetBattleInfoById(Guid battleId)
+		{
+			var battle = _battleHandler.GetBattleById(battleId);
+
+			string battleInfo = "Battle id: " + battle.Id +
+				" FirstBattleMember: " + battle.FirstBattleMember + " Id: "
+				+ battle.FirstBattleMember.GetId().ToString() + " ActivePok: " + battle.FirstBattleMember.ActivePokemon +
+				" SecondBattleMember: " + battle.SecondBattleMember + " Id: "
+				+ battle.SecondBattleMember.GetId().ToString() + " ActivePok: " + battle.SecondBattleMember.ActivePokemon;
+
+			return Ok(battleInfo);
+		}
 		[HttpGet("PokemonGetTest")]
 		public async Task<IActionResult> PokemonTest()
 		{
