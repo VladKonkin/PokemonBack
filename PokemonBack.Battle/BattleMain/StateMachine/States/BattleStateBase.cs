@@ -31,5 +31,6 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 			_battle.FirstBattleMember.BattleTurnSetAction -= OnBattleMemberAction;
 			_battle.SecondBattleMember.BattleTurnSetAction -= OnBattleMemberAction;
 		}
+        
 	}
 }

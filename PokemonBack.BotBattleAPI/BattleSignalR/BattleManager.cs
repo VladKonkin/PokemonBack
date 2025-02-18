@@ -28,10 +28,10 @@ namespace PokemonBack.BotBattleAPI.BattleSignalR
 		}
 		public void RegisterBattle(Guid battleId, IClientProxy clients)
 		{
-            Console.WriteLine("BattleRegister");
+            Console.WriteLine("BattleRegister " + battleId);
             if (!_clients.ContainsKey(battleId))
 			{
-				Console.WriteLine("BattleRegisterIf");
+				Console.WriteLine("BattleRegisterIf " + battleId);
 				_clients[battleId] = clients;
 			}
 		}
@@ -42,6 +42,7 @@ namespace PokemonBack.BotBattleAPI.BattleSignalR
 		}
 		private void UnregisterBattle(BattleSession battle)
 		{
+            Console.WriteLine($"Battle with id {battle.Id} end");
 			_clients.Remove(battle.Id);
 		}
 

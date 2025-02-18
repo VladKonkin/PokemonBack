@@ -38,7 +38,7 @@ namespace PokemonBack.Battle.BattleMain.StateMachine
 		}
 		private void SetStateLog()
 		{
-			_batle?.BattleLoger?.AddStateLog(_activeState?.StateLog);
+			//_batle?.BattleLoger?.AddStateLog(_activeState?.StateLog);
 		}
 	}
 }

@@ -125,6 +125,7 @@ namespace PokemonBack.Battle.BattleMain
 		}
         private void BattleEnd(BattleSession battleSession)
         {
+            Console.WriteLine($"BattleHandler End ");
             _activeBattleList.Remove(battleSession);
 			BattleUnSubscribe(battleSession);
 

@@ -17,15 +17,15 @@ namespace PokemonBack.Battle.Models.BattleMembers
             _pokemonList = user.Pokemons;
         }
 
-        public override void SetTurnData(TurnData turnData)
+        public override void SetTurnData(TurnAction turnData)
 		{
-			_activeTurnData = turnData;
+			_activeTurnAction = turnData;
 			BattleTurnSetAction?.Invoke();
 		}
-		public override void NextTurnStart()
+		public override void ClearTurnAction()
 		{
             Console.WriteLine($"Next Turn user id {_user.Id}");
-			base.NextTurnStart();
+			base.ClearTurnAction();
 		}
 
 		public override void OnTurnEnd()
@@ -44,8 +44,12 @@ namespace PokemonBack.Battle.Models.BattleMembers
 
 		public override void SetMoveId(Guid? id)
 		{
+            Console.WriteLine("ActivePokId " + ActivePokemon.Id);
+            Console.WriteLine("ActivePokMoveList " + ActivePokemon.Moves.Count);
 			var move = ActivePokemon.Moves.FirstOrDefault(x => x.Id == id);
-			var turn = new TurnData(new MoveAction(ActivePokemon,move));
+            Console.WriteLine("Move " + move);
+			var turn = new MoveAction(ActivePokemon,move);
+            Console.WriteLine("Turn " + turn);
 			SetTurnData(turn);
 		}
 

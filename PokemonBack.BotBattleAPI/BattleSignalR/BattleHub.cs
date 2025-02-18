@@ -57,11 +57,9 @@ namespace PokemonBack.BotBattleAPI.BattleSignalR
 
 			if(moveRequest.MoveId == null)
             {
-               // battleMember.ChoosePokemon(moveRequest.NewPokemonId);
-
                 Guid pokemonId = (Guid)moveRequest.NewPokemonId;
 
-				var switchData = new TurnData(new SwitchAction(pokemonId, battleMember));
+				var switchData = new SwitchAction(pokemonId, battleMember);
 
                 battleMember.SetTurnData(switchData);
             }

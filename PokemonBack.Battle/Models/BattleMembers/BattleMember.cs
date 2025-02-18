@@ -13,18 +13,19 @@ namespace PokemonBack.Battle.Models.BattleMembers
     public abstract class BattleMember
     {
         protected BattleSession _battleSession;
-		protected TurnData _activeTurnData;
+		//protected TurnData _activeTurnData;`
+		protected TurnAction _activeTurnAction;
         protected List<PokemonDTO> _pokemonList;
 
         protected PokemonDTO _activePokemon;
 
-        public TurnData ActiveTurnData => _activeTurnData;
+        public TurnAction ActiveTurnAction => _activeTurnAction;
         public PokemonDTO ActivePokemon => _activePokemon;
         public Action BattleTurnSetAction { get; set; }
         
         public bool CantСontinueBattle()
         {
-            PokemonDTO pokemon = _pokemonList.First(p => p.IsAlive);
+            PokemonDTO pokemon = _pokemonList.FirstOrDefault(p => p.IsAlive);
             return pokemon == null;
         }
         public PokemonDTO GetPokemonById(Guid id)
@@ -32,19 +33,19 @@ namespace PokemonBack.Battle.Models.BattleMembers
             return _pokemonList.FirstOrDefault(p => p.Id == id);
         }
         public virtual void SetBattle(BattleSession battleSession) => _battleSession = battleSession;
-        public bool IsReady() => _activeTurnData != null;
-        public virtual void NextTurnStart() => _activeTurnData = null;
-        public abstract void SetTurnData(TurnData turnData);
+        public bool IsReady() => _activeTurnAction != null;
+        public virtual void ClearTurnAction() => _activeTurnAction = null;
+        public abstract void SetTurnData(TurnAction turnData);
         public abstract void SetMoveId(Guid? id);
         public abstract void OnTurnEnd();
         public abstract void ChoosePokemon(PokemonDTO pokemonDTO);
         public virtual void MakeMove(BattleMember defender)
         {
-            _activeTurnData.Action.Execute(defender);
+            _activeTurnAction.Execute(defender);
         }
         public virtual void MakeMove()
         {
-            _activeTurnData.Action.Execute();
+            _activeTurnAction.Execute();
         }
         public virtual Guid GetId()
         {

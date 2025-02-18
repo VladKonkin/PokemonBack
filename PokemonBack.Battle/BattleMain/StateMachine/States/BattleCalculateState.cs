@@ -23,7 +23,12 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 			_firstStateLog = null;
 			_secondStateLog = null;
 
-			CalculateTurn(_battle.FirstBattleMember.ActiveTurnData.Action, _battle.SecondBattleMember.ActiveTurnData.Action);
+            Console.WriteLine("FirstAction " + _battle.FirstBattleMember.ActiveTurnAction);
+            Console.WriteLine("FirstActionPokemon " + _battle.FirstBattleMember.ActiveTurnAction.Pokemon);
+            Console.WriteLine("FirstActionPokemon " + _battle.FirstBattleMember.ActiveTurnAction.Pokemon);
+            Console.WriteLine("SecondAction " + _battle.SecondBattleMember.ActiveTurnAction);
+
+			CalculateTurn(_battle.FirstBattleMember.ActiveTurnAction, _battle.SecondBattleMember.ActiveTurnAction);
 		}
 
 		public override void OnStop()
@@ -65,27 +70,33 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 					ExecuteTurn(_battle.FirstBattleMember, _battle.SecondBattleMember, _firstStateLog);
 				}
 			}
-			if (_battle.FirstBattleMember.CantСontinueBattle() & _battle.SecondBattleMember.CantСontinueBattle())
+			if (_battle.FirstBattleMember.CantСontinueBattle() | _battle.SecondBattleMember.CantСontinueBattle())
 			{
 				_battleStateMachine.SwitchState<BattleEndState>();
 			}
-			if (_battle.FirstBattleMember.ActivePokemon.IsAlive & _battle.SecondBattleMember.ActivePokemon.IsAlive)
-			{
-				_battleStateMachine.SwitchState<BattleTurnEndState>();
-			}
 			else
 			{
-				_battleStateMachine.SwitchState<BattleTurnSwitchWaitState>();
+				if (_battle.FirstBattleMember.ActivePokemon.IsAlive & _battle.SecondBattleMember.ActivePokemon.IsAlive)
+				{
+					_battleStateMachine.SwitchState<BattleTurnEndState>();
+				}
+				else
+				{
+					_battleStateMachine.SwitchState<BattleTurnSwitchWaitState>();
+				}
 			}
 		}
 	
 		private void ExecuteTurn(BattleMember attacker, BattleMember defender, StateLogBase stateLog)
 		{
-			if (attacker.ActiveTurnData.Action is MoveAction moveAction)
+			if (attacker.ActivePokemon.IsAlive)
 			{
-				AttackAction(attacker, defender, stateLog);
+				if (attacker.ActiveTurnAction is MoveAction moveAction)
+				{
+					AttackAction(attacker, defender, stateLog);
+				}
 			}
-			else if (attacker.ActiveTurnData.Action is SwitchAction switchAction)
+			else if (attacker.ActiveTurnAction is SwitchAction switchAction)
 			{
 				SwitchAction(attacker, defender, stateLog);
 			}
@@ -95,13 +106,22 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 		{
 			int initialHp = defender.ActivePokemon.CurrentHp;
 
-			attacker.MakeMove(defender);
+			attacker.MakeMove(defender);     
+
+            Console.WriteLine($"Attack Action {attacker} defender {defender}");
+
+			Console.WriteLine($"Attack ID {attacker.GetId()}");
+			Console.WriteLine($" PokemonId {attacker.ActiveTurnAction.Pokemon.Id}");
+			Console.WriteLine($" PokemonHp {attacker.ActiveTurnAction.Pokemon.MaxHp}:{attacker.ActiveTurnAction.Pokemon.CurrentHp}");
+			Console.WriteLine($"Move Id {attacker.ActiveTurnAction.Move.Id}");
+            Console.WriteLine($"Defender Pokemon Id {defender.ActiveTurnAction.Pokemon.Id}");
 
 			int damageDealt = initialHp - defender.ActivePokemon.CurrentHp;
+            Console.WriteLine($"Damage {damageDealt}");
 			stateLog = new AttackLog(attacker.GetId(),
-				attacker.ActiveTurnData.Pokemon.Id,
-				attacker.ActiveTurnData.Move.Id,
-				defender.ActiveTurnData.Pokemon.Id,
+				attacker.ActiveTurnAction.Pokemon.Id,
+				attacker.ActiveTurnAction.Move.Id,
+				defender.ActiveTurnAction.Pokemon.Id,
 				damageDealt);
 		}
 		private void SwitchAction(BattleMember attacker, BattleMember defender, StateLogBase stateLog)

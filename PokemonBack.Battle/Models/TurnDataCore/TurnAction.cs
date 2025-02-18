@@ -12,7 +12,7 @@ namespace PokemonBack.Battle.Models.TurnDataCore
 	{
 		public abstract string Description { get; }
 
-		public int Priority { get;}
+		public int Priority { get; protected set; }
 		public abstract void Execute(BattleMember target);
 		public abstract void Execute();
 		public virtual PokemonDTO? Pokemon => null;

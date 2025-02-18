@@ -176,29 +176,51 @@ namespace PokemonBack.ServiceDefaults.Data.Repositories
 		}
 		public async Task<UserDTO> GetUserByIdAsync(Guid id)
 		{
-			//var userEntity = await _context.UserDBSet
-			//	.Include(p => p.Pokemons)
-			//	.FirstOrDefaultAsync(u => u.UserId == id);
-
-			//if (userEntity == null) throw new KeyNotFoundException("User Not Found");
-
-			//var userDTO = new UserDTO(userEntity);
-			//userDTO.Pokemons.ForEach(p => p.SetUser(userDTO));
-
-			//return userDTO;
+			//var userDTO = await _context.UserDBSet
+			//.Where(u => u.UserId == id)
+			//.Select(u => new UserDTO
+			//{
+			//	Id = u.UserId,
+			//	UserName = u.UserName,
+			//	Pokemons = u.Pokemons.Select(p => new PokemonDTO
+			//	{
+			//		Id = p.Id,
+			//		Level = p.Level
+			//	}).ToList()
+			//})
+			//.FirstOrDefaultAsync();
 			var userDTO = await _context.UserDBSet
-			.Where(u => u.UserId == id)
-			.Select(u => new UserDTO
-			{
-				Id = u.UserId,
-				UserName = u.UserName,
-				Pokemons = u.Pokemons.Select(p => new PokemonDTO
+				.Where(u => u.UserId == id)
+				.Include(u => u.Pokemons) // Загружаем Покемонов
+					.ThenInclude(p => p.Moves) // Загружаем их атаки
+				.Select(u => new UserDTO
 				{
-					Id = p.Id,
-					Level = p.Level
-				}).ToList()
-			})
-			.FirstOrDefaultAsync();
+					Id = u.UserId,
+					UserName = u.UserName,
+					Pokemons = u.Pokemons.Select(p => new PokemonDTO
+					{
+						Id = p.Id,
+						Level = p.Level,
+						MaxHp = p.MaxHp,
+						CurrentHp = p.CurrentHp,
+						Attack = p.Attack,
+						SpAttack = p.SpAttack,
+						Defence = p.Defence,
+						SpDefence = p.SpDefence,
+						Speed = p.Speed,
+						Element = p.Element,
+						Moves = p.Moves.Select(m => new MoveDTO
+						{
+							Id = m.Id,
+							Element = m.Element,
+							Power = m.Power,
+							Accuracy = m.Accuracy,
+							MaxPP = m.MaxPP,
+							CurrentPP = m.CurrentPP
+						}).ToList()
+					}).ToList()
+				})
+				.FirstOrDefaultAsync();
 			return userDTO;
 		}
 		public async Task<UserDTO> GetUserByNameAsync(string name)

@@ -8,7 +8,6 @@
 
 		// Только для атак
 		public Guid? MoveId { get; set; }
-		public Guid? TargetPokemonId { get; set; }
 
 		// Только для смены покемона
 		public Guid? NewPokemonId { get; set; }

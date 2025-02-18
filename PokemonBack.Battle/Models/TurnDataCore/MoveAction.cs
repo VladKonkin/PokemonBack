@@ -13,16 +13,17 @@ namespace PokemonBack.Battle.Models.TurnDataCore
 		public PokemonDTO PokemonDTO { get; }
 		public MoveDTO MoveDTO { get; }
 
+		public override string Description => $"{Pokemon} use {Move}";
+
+		public override PokemonDTO Pokemon => PokemonDTO;
+		public override MoveDTO Move => MoveDTO;
 		public MoveAction(PokemonDTO pokemon, MoveDTO move)
 		{
+			Priority = 1;
 			PokemonDTO = pokemon;
 			MoveDTO = move;
 		}
 
-		public override string Description => $"{Pokemon} use {Move}";
-
-		public override PokemonDTO Pokemon => Pokemon;
-		public override MoveDTO Move => Move;
 
 		public override void Execute(BattleMember target)
 		{

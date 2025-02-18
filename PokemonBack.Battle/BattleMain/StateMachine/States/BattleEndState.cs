@@ -14,6 +14,7 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 
 		public BattleEndState(BattleStateMachine battleStateMachine, BattleSession battle) : base(battleStateMachine, battle)
 		{
+			_battle = battle;
 		}
 
 		public override void OnBattleMemberAction()

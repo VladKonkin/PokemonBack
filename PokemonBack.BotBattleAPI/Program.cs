@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.AddDBServices();
 builder.AddBattleServices();
-builder.Services.AddScoped<BattleManager>();
+builder.Services.AddSingleton<BattleManager>();
 builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>

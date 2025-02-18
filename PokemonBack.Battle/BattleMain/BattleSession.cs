@@ -49,5 +49,6 @@ namespace PokemonBack.Battle.BattleMain
         {
             OnBattleEndAction?.Invoke(this);
 		}
+        
     }
 }

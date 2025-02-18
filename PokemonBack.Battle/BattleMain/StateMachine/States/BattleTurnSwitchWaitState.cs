@@ -12,7 +12,7 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 	public class BattleTurnSwitchWaitState : BattleStateBase
 	{
 		private BattleMember _switcher;
-		private TurnData _switcherData;
+		private TurnAction _switcherData;
 		public BattleTurnSwitchWaitState(BattleStateMachine battleStateMachine, BattleSession battle) : base(battleStateMachine, battle)
 		{
 		}
@@ -43,7 +43,7 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 
 		private void CheckPokemonSwitchReady()
 		{
-			if(_switcher.ActiveTurnData != _switcherData)
+			if(_switcher.ActiveTurnAction != _switcherData)
 			{
 				var prevPokemon = _switcher.ActivePokemon;
 
@@ -56,7 +56,7 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 		private void CheckSwitcher()
 		{
 			_switcher = _battle.FirstBattleMember.ActivePokemon.IsAlive ? _battle.SecondBattleMember : _battle.FirstBattleMember;
-			_switcherData = _switcher.ActiveTurnData;
+			_switcherData = _switcher.ActiveTurnAction;
 
 		}
 	}
