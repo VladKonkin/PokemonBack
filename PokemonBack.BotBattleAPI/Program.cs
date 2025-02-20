@@ -30,9 +30,16 @@ builder.Services.AddCors(options =>
 	});
 });
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+	options.ListenAnyIP(5000); // Запуск без HTTPS
+});
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
+
+
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
