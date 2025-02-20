@@ -1,0 +1,32 @@
+{
+  "projectPath": ".",
+  "inputPath": "aspirate-output",
+  "outputPath": "aspirate-output",
+  "namespace": "PokemonBackTest",
+  "containerImageTags": [
+    "latest"
+  ],
+  "imagePullPolicy": "IfNotPresent",
+  "containerBuilder": "docker",
+  "outputFormat": "kustomize",
+  "skipFinalKustomizeGeneration": false,
+  "privateRegistryEmail": "aspir8@aka.ms",
+  "includeDashboard": true,
+  "useCustomNamespace": true,
+  "secrets": {
+    "salt": "aXPPV5tzYkpdw/Wt",
+    "hash": "WuvOpfyH6TWGOdaTtMImW\u002Bph0Ybvs8T6AH3YOPLn8XM=",
+    "secrets": {
+      "postgres-password": {
+        "value": "aXPPV5tzYkpdw/WtdpyABigoIXXTMwTKyJ/Z0q8DhSc25eSWHvt8HILUv8WsvZUUZLM="
+      },
+      "postgres": {
+        "POSTGRES_PASSWORD": "aXPPV5tzYkpdw/WtdpyABigoIXXTMwTKyJ/Z0q8DhSc25eSWHvt8HILUv8WsvZUUZLM="
+      },
+      "pokemonback-botbattleapi": {
+        "ConnectionStrings__postgres": "aXPPV5tzYkpdw/Wth6920KTGSG4QmUeUl9obmN8kuAZSo/myHshgHaOgqtOIs91tJ\u002BqUWLJzjUse9FuGQdq9Or3MaoGIM4sgqXx9fVB0jf9GeYMF3tocqZBLHrqL85WC91sBW7o="
+      }
+    }
+  },
+  "processAllComponents": true
+}

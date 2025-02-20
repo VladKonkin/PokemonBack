@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pokemonback-botbattleapi
+  labels:
+    app: pokemonback-botbattleapi
+spec:
+  minReadySeconds: 60
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pokemonback-botbattleapi
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: pokemonback-botbattleapi
+    spec:
+      containers:
+      - name: pokemonback-botbattleapi
+        image: pokemonback-botbattleapi:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: https
+          containerPort: 8443
+        envFrom:
+        - configMapRef:
+            name: pokemonback-botbattleapi-env
+        - secretRef:
+            name: pokemonback-botbattleapi-secrets
+      terminationGracePeriodSeconds: 180

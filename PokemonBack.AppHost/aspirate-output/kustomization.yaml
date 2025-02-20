@@ -1,0 +1,12 @@
+namespace: pokemonbacktest
+
+resources:
+- postgres
+- pokemonback-botbattleapi
+- namespace.yaml
+- dashboard.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+
