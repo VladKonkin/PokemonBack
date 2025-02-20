@@ -30,10 +30,10 @@ builder.Services.AddCors(options =>
 	});
 });
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-	options.ListenAnyIP(5000); // Запуск без HTTPS
-});
+//builder.WebHost.ConfigureKestrel(options =>
+//{
+//	options.ListenAnyIP(5000); // Запуск без HTTPS
+//});
 
 var app = builder.Build();
 

@@ -4,3 +4,22 @@ services:
     build:
       context: .
       dockerfile: PokemonBack.BotBattleAPI/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Username=postgres;Password=yourpassword;Database=pokemon
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: PokemonDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+volumes:
+  pgdata:
