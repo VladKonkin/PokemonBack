@@ -1,0 +1,6 @@
+services:
+  pokemonback.botbattleapi:
+    image: ${DOCKER_REGISTRY-}pokemonbackbotbattleapi
+    build:
+      context: .
+      dockerfile: PokemonBack.BotBattleAPI/Dockerfile

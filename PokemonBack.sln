@@ -16,6 +16,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokemonBack.BotBattleAPI", 
 		{87A090E8-BAD3-4549-93D5-A78628337CDB} = {87A090E8-BAD3-4549-93D5-A78628337CDB}
 	EndProjectSection
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1F219A31-6798-4A6B-B075-07C06062AA75}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{3F0DBA68-8850-4059-AFDA-EEB2F12972FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F0DBA68-8850-4059-AFDA-EEB2F12972FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F0DBA68-8850-4059-AFDA-EEB2F12972FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F219A31-6798-4A6B-B075-07C06062AA75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F219A31-6798-4A6B-B075-07C06062AA75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F219A31-6798-4A6B-B075-07C06062AA75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F219A31-6798-4A6B-B075-07C06062AA75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
