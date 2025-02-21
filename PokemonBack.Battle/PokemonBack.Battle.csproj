@@ -11,9 +11,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BattleCalculator\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\PokemonBack.ServiceDefaults\PokemonBack.ServiceDefaults.csproj" />
   </ItemGroup>
 </Project>

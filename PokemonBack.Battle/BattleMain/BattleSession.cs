@@ -22,6 +22,7 @@ namespace PokemonBack.Battle.BattleMain
 
         public Action<Guid,StateLogBase> OnStateChangeAction;
         public Action<BattleSession> OnBattleEndAction;
+        public Action OnTurnEndAction;
         
         public int TurnNumber { get; private set; }
         public BattleSession(Guid id, BattleMember firstBattleMember,BattleMember secondBattleMember)
@@ -40,7 +41,9 @@ namespace PokemonBack.Battle.BattleMain
         public void OnTurnEnd()
         {
             TurnNumber++;
-        }
+            OnTurnEndAction?.Invoke();
+
+		}
         public void OnStateChange(StateLogBase stateLog)
         {
             OnStateChangeAction?.Invoke(Id,stateLog);

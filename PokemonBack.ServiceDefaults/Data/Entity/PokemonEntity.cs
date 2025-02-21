@@ -25,7 +25,7 @@ namespace PokemonBack.ServiceDefaults.Data.Entity
 		public int Defence { get; set; }
 		public int SpDefence { get; set; }
 		public int Speed { get; set; }
-		public Element Element { get; set; }
+		public PokemonType Element { get; set; }
 
 		public List<MoveEntity> Moves { get; set; }
 	}

@@ -14,7 +14,7 @@ namespace PokemonBack.ServiceDefaults.Data.Entity
 		public PokemonEntity PokemonEntity { get; set; }
 		public Guid PokemonId { get; set; }
 
-		public Element Element { get; set; }
+		public PokemonType Element { get; set; }
 		public int Power { get; set; }
 		public int Accuracy { get; set; }
 		public int MaxPP { get; set; }

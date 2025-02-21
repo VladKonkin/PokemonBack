@@ -20,7 +20,7 @@ namespace PokemonBack.ServiceDefaults.Data.DTO
 		public int SpDefence { get; set; }
 		public int Speed { get; set; }
 		public bool IsAlive => CurrentHp > 0;
-		public Element Element { get; set; }
+		public PokemonType Element { get; set; }
 		public List<MoveDTO> Moves { get; set; }
 		public UserDTO User { get; set; }
 

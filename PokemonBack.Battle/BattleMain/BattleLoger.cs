@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace PokemonBack.Battle.BattleMain
 {
     public class BattleLoger
     {
 		private BattleSession _battle;
-		public TurnLog ActiveTurnLog { get; private set; }
+		private TurnLog _activeTurnLog;
 
 		private List<TurnLog> _battleLogList;
 		public BattleLoger(BattleSession battle)
@@ -19,13 +20,41 @@ namespace PokemonBack.Battle.BattleMain
 			_battle = battle;
 
 			_battleLogList = new List<TurnLog>();
-			ActiveTurnLog = new TurnLog(_battle.TurnNumber);
-			_battleLogList.Add(ActiveTurnLog);
+			_activeTurnLog = new TurnLog(_battle.TurnNumber);
+			_battleLogList.Add(_activeTurnLog);
+
+			SubscribeBattleActions();
 		}
-		public void AddStateLog(StateLogBase stateLog)
+		private void AddStateLog(Guid battleId, StateLogBase stateLog)
 		{
-			ActiveTurnLog.AddStateLog(stateLog);
-			_battle.OnStateChange(stateLog);
+			_activeTurnLog.AddStateLog(stateLog);
+		}
+		private void SubscribeBattleActions()
+		{
+			_battle.OnStateChangeAction += AddStateLog;
+			_battle.OnBattleEndAction += OnBattleEnd;
+			_battle.OnTurnEndAction += OnTurnEnd;
+		}
+		private void UnSubscribeBattleActions()
+		{
+			_battle.OnStateChangeAction -= AddStateLog;
+			_battle.OnBattleEndAction -= OnBattleEnd;
+			_battle.OnTurnEndAction -= OnTurnEnd;
+		}
+		private void OnBattleEnd(BattleSession battle)
+		{
+			UnSubscribeBattleActions();
+			ToJson();
+		}
+		private void OnTurnEnd()
+		{
+			_activeTurnLog = new TurnLog(_battle.TurnNumber);
+			_battleLogList.Add(_activeTurnLog);
+		}
+		private void ToJson()
+		{
+			string battleLogJson = JsonConvert.SerializeObject(_battleLogList, Formatting.Indented);
+			Console.WriteLine(battleLogJson);
 		}
 	}
 }

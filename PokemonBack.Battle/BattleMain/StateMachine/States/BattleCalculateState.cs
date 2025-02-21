@@ -34,7 +34,7 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 		public override void OnStop()
 		{
 			StateLog = new CalculateLog(_firstStateLog, _secondStateLog);
-			Console.WriteLine($"OnStop Calculate First: {_firstStateLog?.ToJson()} Second: {_secondStateLog?.ToJson()} Log: {StateLog?.ToJson()}");
+			
 			_battle.OnStateChange(StateLog);
 		}
 		public override void OnBattleMemberAction()
@@ -108,23 +108,14 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 			int initialHp = defender.ActivePokemon.CurrentHp;
 
 			attacker.MakeMove(defender);     
-
-            Console.WriteLine($"Attack Action {attacker} defender {defender}");
-
-			Console.WriteLine($"Attack ID {attacker.GetId()}");
-			Console.WriteLine($" PokemonId {attacker.ActiveTurnAction.Pokemon.Id}");
-			Console.WriteLine($" PokemonHp {attacker.ActiveTurnAction.Pokemon.MaxHp}:{attacker.ActiveTurnAction.Pokemon.CurrentHp}");
-			Console.WriteLine($"Move Id {attacker.ActiveTurnAction.Move.Id}");
-            Console.WriteLine($"Defender Pokemon Id {defender.ActiveTurnAction.Pokemon.Id}");
-
+			
 			int damageDealt = initialHp - defender.ActivePokemon.CurrentHp;
-            Console.WriteLine($"Damage {damageDealt}");
+            
 			stateLog = new AttackLog(attacker.GetId(),
 				attacker.ActiveTurnAction.Pokemon.Id,
 				attacker.ActiveTurnAction.Move.Id,
 				defender.ActiveTurnAction.Pokemon.Id,
 				damageDealt);
-			Console.WriteLine("AttackAction StateLog: " + stateLog.ToJson());
 		}
 		private void SwitchAction(BattleMember attacker, BattleMember defender, ref StateLogBase stateLog)
 		{

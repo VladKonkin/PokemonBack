@@ -13,7 +13,7 @@ namespace PokemonBack.Battle.Models.BattleMembers
     public abstract class BattleMember
     {
         protected BattleSession _battleSession;
-		//protected TurnData _activeTurnData;`
+		
 		protected TurnAction _activeTurnAction;
         protected List<PokemonDTO> _pokemonList;
 

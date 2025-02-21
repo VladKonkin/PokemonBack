@@ -152,7 +152,7 @@ namespace PokemonBack.ServiceDefaults.Data.Seed
 				Defence = 30,
 				SpDefence = 35,
 				Speed = 45,
-				Element = Element.Fire,
+				Element = PokemonType.Fire,
 			};
 
 			var pokemon2 = new PokemonEntity
@@ -168,7 +168,7 @@ namespace PokemonBack.ServiceDefaults.Data.Seed
 				Defence = 40,
 				SpDefence = 45,
 				Speed = 50,
-				Element = Element.Water,
+				Element = PokemonType.Water,
 			};
 
 			var move1 = new MoveEntity
@@ -176,7 +176,7 @@ namespace PokemonBack.ServiceDefaults.Data.Seed
 				Id = Guid.NewGuid(),
 				PokemonId = pokemon1.Id,
 				MovePokedexId = Guid.NewGuid(),
-				Element = Element.Fire,
+				Element = PokemonType.Fire,
 				Power = 40,
 				Accuracy = 90,
 				MaxPP = 25,
@@ -187,7 +187,7 @@ namespace PokemonBack.ServiceDefaults.Data.Seed
 				Id = Guid.NewGuid(),
 				PokemonId = pokemon2.Id,
 				MovePokedexId = Guid.NewGuid(),
-				Element = Element.Water,
+				Element = PokemonType.Water,
 				Power = 50,
 				Accuracy = 95,
 				MaxPP = 20,
@@ -203,7 +203,7 @@ namespace PokemonBack.ServiceDefaults.Data.Seed
 				SpAttack = 1,
 				Defence = 1,
 				SpDefence = 1,
-				Element = Element.Fire,
+				Element = PokemonType.Fire,
 				Level = 1,
 				MaxHp = 1,
 				Speed = 1
@@ -217,7 +217,7 @@ namespace PokemonBack.ServiceDefaults.Data.Seed
 				SpAttack = 1,
 				Defence = 1,
 				SpDefence = 1,
-				Element = Element.Fire,
+				Element = PokemonType.Fire,
 				Level = 1,
 				MaxHp = 1,
 				Speed = 1
@@ -227,7 +227,7 @@ namespace PokemonBack.ServiceDefaults.Data.Seed
 				Id = move1.MovePokedexId,
 				Name = "Move1",
 				Description = "Description",
-				Element = Element.Fire,
+				Element = PokemonType.Fire,
 				Power = 1,
 				Accuracy = 1,
 				MaxPP = 1,
@@ -238,7 +238,7 @@ namespace PokemonBack.ServiceDefaults.Data.Seed
 				Id = move2.MovePokedexId,
 				Name = "Move2",
 				Description = "Description",
-				Element = Element.Water,
+				Element = PokemonType.Water,
 				Power = 1,
 				Accuracy = 1,
 				MaxPP = 1,

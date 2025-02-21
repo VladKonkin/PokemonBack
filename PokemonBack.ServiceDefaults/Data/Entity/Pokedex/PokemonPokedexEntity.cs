@@ -18,7 +18,7 @@ namespace PokemonBack.ServiceDefaults.Data.Entity.Pokedex
 		public int Defence { get; set; }
 		public int SpDefence { get; set; }
 		public int Speed { get; set; }
-		public Element Element { get; set; }
+		public PokemonType Element { get; set; }
 		//public List<PokemonEntity> Pokemons { get; set; }
 	}
 }
