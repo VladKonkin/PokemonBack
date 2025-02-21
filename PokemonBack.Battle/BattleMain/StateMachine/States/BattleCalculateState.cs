@@ -34,6 +34,7 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 		public override void OnStop()
 		{
 			StateLog = new CalculateLog(_firstStateLog, _secondStateLog);
+			Console.WriteLine($"OnStop Calculate First: {_firstStateLog?.ToJson()} Second: {_secondStateLog?.ToJson()} Log: {StateLog?.ToJson()}");
 			_battle.OnStateChange(StateLog);
 		}
 		public override void OnBattleMemberAction()
@@ -48,26 +49,26 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 			{
 				if (SpeedCheck(firstMemberTurn, secondMemberTurn))
 				{
-					ExecuteTurn(_battle.FirstBattleMember, _battle.SecondBattleMember, _firstStateLog);
-					ExecuteTurn( _battle.SecondBattleMember, _battle.FirstBattleMember, _secondStateLog);
+					ExecuteTurn(_battle.FirstBattleMember, _battle.SecondBattleMember, ref _firstStateLog);
+					ExecuteTurn( _battle.SecondBattleMember, _battle.FirstBattleMember, ref _secondStateLog);
 				}
 				else
 				{
-					ExecuteTurn(_battle.SecondBattleMember, _battle.FirstBattleMember, _secondStateLog);
-					ExecuteTurn(_battle.FirstBattleMember, _battle.SecondBattleMember, _firstStateLog);
+					ExecuteTurn(_battle.SecondBattleMember, _battle.FirstBattleMember, ref _secondStateLog);
+					ExecuteTurn(_battle.FirstBattleMember, _battle.SecondBattleMember, ref _firstStateLog);
 				}
 			}
 			else
 			{
 				if (PriorityCheck(firstMemberTurn, secondMemberTurn))
 				{
-					ExecuteTurn(_battle.FirstBattleMember, _battle.SecondBattleMember, _firstStateLog);
-					ExecuteTurn(_battle.SecondBattleMember, _battle.FirstBattleMember, _secondStateLog);
+					ExecuteTurn(_battle.FirstBattleMember, _battle.SecondBattleMember, ref _firstStateLog);
+					ExecuteTurn(_battle.SecondBattleMember, _battle.FirstBattleMember, ref _secondStateLog);
 				}
 				else
 				{
-					ExecuteTurn(_battle.SecondBattleMember, _battle.FirstBattleMember, _secondStateLog);
-					ExecuteTurn(_battle.FirstBattleMember, _battle.SecondBattleMember, _firstStateLog);
+					ExecuteTurn(_battle.SecondBattleMember, _battle.FirstBattleMember, ref _secondStateLog);
+					ExecuteTurn(_battle.FirstBattleMember, _battle.SecondBattleMember, ref _firstStateLog);
 				}
 			}
 			if (_battle.FirstBattleMember.CantСontinueBattle() | _battle.SecondBattleMember.CantСontinueBattle())
@@ -87,22 +88,22 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 			}
 		}
 	
-		private void ExecuteTurn(BattleMember attacker, BattleMember defender, StateLogBase stateLog)
+		private void ExecuteTurn(BattleMember attacker, BattleMember defender, ref StateLogBase stateLog)
 		{
 			if (attacker.ActivePokemon.IsAlive)
 			{
 				if (attacker.ActiveTurnAction is MoveAction moveAction)
 				{
-					AttackAction(attacker, defender, stateLog);
+					AttackAction(attacker, defender, ref stateLog);
 				}
 			}
 			else if (attacker.ActiveTurnAction is SwitchAction switchAction)
 			{
-				SwitchAction(attacker, defender, stateLog);
+				SwitchAction(attacker, defender, ref stateLog);
 			}
 
 		}
-		private void AttackAction(BattleMember attacker, BattleMember defender, StateLogBase stateLog)
+		private void AttackAction(BattleMember attacker, BattleMember defender, ref StateLogBase stateLog)
 		{
 			int initialHp = defender.ActivePokemon.CurrentHp;
 
@@ -123,12 +124,14 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 				attacker.ActiveTurnAction.Move.Id,
 				defender.ActiveTurnAction.Pokemon.Id,
 				damageDealt);
+			Console.WriteLine("AttackAction StateLog: " + stateLog.ToJson());
 		}
-		private void SwitchAction(BattleMember attacker, BattleMember defender, StateLogBase stateLog)
+		private void SwitchAction(BattleMember attacker, BattleMember defender, ref StateLogBase stateLog)
 		{
 			var prevPokemonId = attacker.ActivePokemon.Id;
 			attacker.MakeMove();
 			stateLog = new SwitchPokemonLog(attacker.GetId(), prevPokemonId, attacker.ActivePokemon.Id);
+			Console.WriteLine("SwitchAction StateLog: " + stateLog.ToJson());
 		}
 		private bool SpeedCheck(TurnAction firstMemberTurn, TurnAction secondMemberTurn)
 		{

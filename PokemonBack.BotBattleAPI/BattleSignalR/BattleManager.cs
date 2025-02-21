@@ -37,8 +37,8 @@ namespace PokemonBack.BotBattleAPI.BattleSignalR
 		}
 		private void BattleStateChanged(Guid battleId,StateLogBase stateLog)
 		{
-            Console.WriteLine("BattleStateChanged: " + battleId + " " + stateLog);
-            _clients[battleId].SendAsync("StateChanged",stateLog);
+            Console.WriteLine("BattleStateChanged: " + battleId + " " + stateLog.ToJson());
+            _clients[battleId].SendAsync("StateChanged",stateLog.ToJson());
 		}
 		private void UnregisterBattle(BattleSession battle)
 		{

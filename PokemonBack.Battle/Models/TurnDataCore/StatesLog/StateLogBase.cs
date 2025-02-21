@@ -17,5 +17,6 @@ namespace PokemonBack.Battle.Models.TurnDataCore.StatesLog
 		{
 			ActionType = actionType;
 		}
+		public string ToJson() => JsonConvert.SerializeObject(this);
 	}
 }
