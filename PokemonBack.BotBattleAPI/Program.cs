@@ -26,6 +26,7 @@ builder.Services.AddCors(options =>
 			.AllowAnyOrigin()   // Разрешаем любые источники
 			.AllowAnyMethod()
 			.AllowAnyHeader();
+			
 		// Учетные данные отключены
 	});
 });

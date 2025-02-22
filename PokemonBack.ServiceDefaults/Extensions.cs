@@ -11,6 +11,10 @@ using OpenTelemetry.Trace;
 using PokemonBack.ServiceDefaults.Data.Context;
 using PokemonBack.ServiceDefaults.Data.DTO;
 using PokemonBack.ServiceDefaults.Data.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using PokemonBack.ServiceDefaults.Auth;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -39,7 +43,34 @@ public static class Extensions
 	}
 	public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
     {
-        builder.ConfigureOpenTelemetry();
+
+		var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+		var secretKey = jwtSettings["SecretKey"];
+
+		builder.Services.AddAuthentication(options =>
+		{
+			options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+			options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+		})
+		.AddJwtBearer(options =>
+		{
+			options.TokenValidationParameters = new TokenValidationParameters
+			{
+				ValidateIssuer = true,
+				ValidateAudience = true,
+				ValidateLifetime = true,
+				ValidateIssuerSigningKey = true,
+				ValidIssuer = jwtSettings["Issuer"],
+				ValidAudience = jwtSettings["Audience"],
+				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+			};
+		});
+
+        builder.Services.AddTransient<JWTTokenGenerator>();
+
+		builder.Services.AddAuthorization();
+
+		builder.ConfigureOpenTelemetry();
 
         builder.AddDefaultHealthChecks();
 
@@ -57,7 +88,40 @@ public static class Extensions
         return builder;
     }
 
-    public static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder)
+	public static IServiceCollection AddAuthentication(this IHostApplicationBuilder builder)
+	{
+		var services = builder.Services;
+		var configuration = builder.Configuration;
+
+
+		var jwtSettings = configuration.GetSection("JwtSettings");
+		var secretKey = jwtSettings["SecretKey"];
+
+		services.AddAuthentication(options =>
+		{
+			options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+			options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+		})
+		.AddJwtBearer(options =>
+		{
+			options.TokenValidationParameters = new TokenValidationParameters
+			{
+				ValidateIssuer = true,
+				ValidateAudience = true,
+				ValidateLifetime = true,
+				ValidateIssuerSigningKey = true,
+				ValidIssuer = jwtSettings["Issuer"],
+				ValidAudience = jwtSettings["Audience"],
+				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+			};
+		});
+
+		services.AddAuthorization();
+
+
+		return services;
+	}
+	public static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder)
     {
         builder.Logging.AddOpenTelemetry(logging =>
         {

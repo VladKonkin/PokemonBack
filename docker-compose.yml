@@ -1,12 +1,33 @@
 services:
+  pokemonback.apphost:
+    image: ${DOCKER_REGISTRY-}pokemonbackapphost
+    build:
+      context: .
+      dockerfile: PokemonBack.AppHost/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - DOTNET_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:6000
+      - DOTNET_ROLL_FORWARD=LatestMajor
+    ports:
+      - "6000:6000"
+    depends_on:
+      - db
+      - pokemonback.botbattleapi
+
   pokemonback.botbattleapi:
     image: ${DOCKER_REGISTRY-}pokemonbackbotbattleapi
     build:
       context: .
       dockerfile: PokemonBack.BotBattleAPI/Dockerfile
     environment:
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:5000
-      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Username=postgres;Password=yourpassword;Database=pokemon
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Username=postgres;Password=password;Database=PokemonDb
+      - JwtSettings__SecretKey=YOUR_SECRET_KEY_Super_secret_Key
+      - JwtSettings__Issuer=YourIssuer
+      - JwtSettings__Audience=YourAudience
+      - JwtSettings__TokenLifetimeMinutes=60
     depends_on:
       - db
     ports:
@@ -20,6 +41,8 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
   pgdata:

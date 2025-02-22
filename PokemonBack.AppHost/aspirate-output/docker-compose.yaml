@@ -1,0 +1,46 @@
+services:
+  aspire-dashboard:
+    container_name: "aspire-dashboard"
+    image: "mcr.microsoft.com/dotnet/aspire-dashboard:9.0"
+    environment:
+      DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS: "true"
+    ports:
+    - target: 18888
+      published:
+        port_as_int: 18888
+    restart: unless-stopped
+  postgres:
+    container_name: "postgres"
+    image: "docker.io/library/postgres:17.0"
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "scram-sha-256"
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256 --auth-local=scram-sha-256"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "8HNUY6rWtTndROEyVzuLwj"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://aspire-dashboard:18889"
+      OTEL_SERVICE_NAME: "postgres"
+    ports:
+    - target: 5432
+      published:
+        port_as_int: 5432
+    restart: unless-stopped
+  pokemonback-botbattleapi:
+    container_name: "pokemonback-botbattleapi"
+    image: "pokemonback-botbattleapi:latest"
+    environment:
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      HTTP_PORTS: "8080"
+      ConnectionStrings__postgres: "Host=postgres;Port=5432;Username=postgres;Password=8HNUY6rWtTndROEyVzuLwj"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://aspire-dashboard:18889"
+      OTEL_SERVICE_NAME: "pokemonback-botbattleapi"
+    ports:
+    - target: 8080
+      published:
+        port_as_int: 10000
+    - target: 8443
+      published:
+        port_as_int: 10001
+    restart: unless-stopped

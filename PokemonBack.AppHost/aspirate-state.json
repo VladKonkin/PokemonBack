@@ -1,18 +1,13 @@
 {
   "projectPath": ".",
-  "inputPath": "aspirate-output",
   "outputPath": "aspirate-output",
-  "namespace": "PokemonBackTest",
   "containerImageTags": [
     "latest"
   ],
-  "imagePullPolicy": "IfNotPresent",
   "containerBuilder": "docker",
-  "outputFormat": "kustomize",
-  "skipFinalKustomizeGeneration": false,
+  "outputFormat": "compose",
   "privateRegistryEmail": "aspir8@aka.ms",
   "includeDashboard": true,
-  "useCustomNamespace": true,
   "secrets": {
     "salt": "aXPPV5tzYkpdw/Wt",
     "hash": "WuvOpfyH6TWGOdaTtMImW\u002Bph0Ybvs8T6AH3YOPLn8XM=",
