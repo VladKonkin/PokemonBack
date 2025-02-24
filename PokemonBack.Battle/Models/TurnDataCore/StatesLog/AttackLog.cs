@@ -10,13 +10,13 @@ namespace PokemonBack.Battle.Models.TurnDataCore.StatesLog
 
 	public class AttackLog : StateLogBase
 	{
-		[JsonProperty] public Guid PlayerId { get; set; }
-		[JsonProperty] public Guid PokemonId { get; set; }
-		[JsonProperty] public Guid MoveId { get; set; }
-		[JsonProperty] public Guid TargetPokemonId { get; set; }
+		[JsonProperty] public string PlayerId { get; set; }
+		[JsonProperty] public string PokemonId { get; set; }
+		[JsonProperty] public string MoveId { get; set; }
+		[JsonProperty] public string TargetPokemonId { get; set; }
 		[JsonProperty] public int DamageDealt { get; set; }
 
-		public AttackLog(Guid playerId, Guid pokemonId, Guid moveId, Guid targetPokemonId, int damageDealt)
+		public AttackLog(string playerId, string pokemonId, string moveId, string targetPokemonId, int damageDealt)
 			: base("Attack")
 		{
 			PlayerId = playerId;

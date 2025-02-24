@@ -1,16 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
-using PokemonBack.ServiceDefaults.Data.Context;
-using PokemonBack.ServiceDefaults.Data.DTO;
-using PokemonBack.ServiceDefaults.Data.Repositories;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -27,14 +23,14 @@ public static class Extensions
 		//	//builder.Configuration.GetConnectionString("postgres");
 		//	options.UseNpgsql(connectionString); // Использование PostgreSQL
 		//});
-		builder.Services.AddDbContext<PokemonContext>(options =>
-		{
-			var connectionString = "Host=db; Database=PokemonDb; Username=postgres; Password=password; Include Error Detail=true;";
-			options.UseNpgsql(connectionString); // Использование PostgreSQL
-		});
+		//builder.Services.AddDbContext<PokemonContext>(options =>
+		//{
+		//	var connectionString = "Host=db; Database=PokemonDb; Username=postgres; Password=password; Include Error Detail=true;";
+		//	options.UseNpgsql(connectionString); // Использование PostgreSQL
+		//});
 
-		builder.Services.AddTransient<PokemonContext>();
-		builder.Services.AddScoped<PokemonRepository>();
+		//builder.Services.AddTransient<PokemonContext>();
+		//builder.Services.AddScoped<PokemonRepository>();
 		return builder;
 	}
 	public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)

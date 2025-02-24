@@ -1,4 +1,6 @@
-﻿using PokemonBack.Battle.Models.TurnDataCore;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Newtonsoft.Json;
+using PokemonBack.Battle.Models.TurnDataCore;
 using PokemonBack.ServiceDefaults.Data.DTO;
 using System;
 using System.Collections.Generic;
@@ -27,7 +29,10 @@ namespace PokemonBack.Battle.Models.BattleMembers
             Console.WriteLine($"Next Turn user id {_user.Id}");
 			base.ClearTurnAction();
 		}
-
+		public string GetTestUserJson()
+		{
+			return JsonConvert.SerializeObject(_user);
+		}
 		public override void OnTurnEnd()
 		{
 			
@@ -37,12 +42,12 @@ namespace PokemonBack.Battle.Models.BattleMembers
 		{
 			_activePokemon = pokemonDTO;
 		}
-		public override Guid GetId()
+		public override string GetId()
 		{
 			return _user.Id;
 		}
 
-		public override void SetMoveId(Guid? id)
+		public override void SetMoveId(string? id)
 		{
             Console.WriteLine("ActivePokId " + ActivePokemon.Id);
             Console.WriteLine("ActivePokMoveList " + ActivePokemon.Moves.Count);

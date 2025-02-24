@@ -1,15 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Newtonsoft.Json;
 using PokemonBack.Battle.Models.BattleMembers;
 using PokemonBack.Battle.Models.TurnDataCore.StatesLog;
-using PokemonBack.ServiceDefaults.Data.Context;
 using PokemonBack.ServiceDefaults.Data.DTO;
-using PokemonBack.ServiceDefaults.Data.Entity;
-using PokemonBack.ServiceDefaults.Data.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PokemonBack.ServiceDefaults.Data.TestData;
 
 namespace PokemonBack.Battle.BattleMain
 {
@@ -18,7 +11,6 @@ namespace PokemonBack.Battle.BattleMain
         private List<BattleRoom> _battleRoomList;
         private List<BattleSession> _activeBattleList;
 
-        private PokemonRepository _pokemonRepository;
         private IServiceProvider _serviceProvider;
 
         public List<BattleRoom> ReadyBattles => _battleRoomList;
@@ -41,7 +33,7 @@ namespace PokemonBack.Battle.BattleMain
         {
             return _activeBattleList.FirstOrDefault(b => b.Id == battleId);
         }
-        public async Task<BattleRoom> CreateBattleRoom(Guid userId)
+        public async Task<BattleRoom> CreateBattleRoom(string userId)
         {
 			var battleUser = await CreateBattleMemberById(userId);
 
@@ -51,7 +43,7 @@ namespace PokemonBack.Battle.BattleMain
             Console.WriteLine(battleRoom + " Create battleRoom");
             return battleRoom;
         }
-        public async Task<BattleSession> ConnectToFirstBattleRoom(Guid userId)
+        public async Task<BattleSession> ConnectToFirstBattleRoom(string userId)
         {
            var battleUser = await CreateBattleMemberById(userId);
 
@@ -60,15 +52,9 @@ namespace PokemonBack.Battle.BattleMain
             room.AddUser(battleUser);
 			return CreateBattle(room);
         }
-        public async Task<BattleSession> ConnectToBattleRoom(Guid battleId,Guid userId)
+        public async Task<BattleSession> ConnectToBattleRoom(Guid battleId,string userId)
         {
-		
-			Console.WriteLine(_battleRoomList.Count + " Count (before search)");
-
 			var room = _battleRoomList.FirstOrDefault(r => r.BattleID == battleId);
-
-			Console.WriteLine(room + " Room"); // Здесь должно быть либо "null Room", либо объект
-			Console.WriteLine(_battleRoomList.Count + " Count (after search)");
 
 			if (room == null)
 			{
@@ -81,7 +67,7 @@ namespace PokemonBack.Battle.BattleMain
 			return CreateBattle(room);
 
 		}
-        public BattleMember GetBattleMemberById(Guid userId)
+        public BattleMember GetBattleMemberById(string userId)
         {
             var battle = _activeBattleList.FirstOrDefault(b => b.FirstBattleMember.GetId() == userId | b.SecondBattleMember.GetId() == userId);
             if (battle == null) throw new Exception("Battle not found");
@@ -99,13 +85,24 @@ namespace PokemonBack.Battle.BattleMain
 
 			return battle;
 		}
-        private async Task<UserBattleMember> CreateBattleMemberById(Guid userId)
+        private async Task<UserBattleMember> CreateBattleMemberById(string userId)
         {
-			using var scope = _serviceProvider.CreateScope();
-			var pokemonRepository = scope.ServiceProvider.GetRequiredService<PokemonRepository>();
-			var userDTO = await pokemonRepository.GetUserByIdAsync(userId);
+            TestDataDTO test = new TestDataDTO();
+            var userDTO = test.GetUserById(userId);
 
-			var battleUser = new UserBattleMember(userDTO);
+
+            //Egor json to UserDTO TODO
+
+
+
+            var battleUser = new UserBattleMember(userDTO);
+
+            Console.WriteLine($"User: {JsonConvert.SerializeObject(userDTO)}");
+            Console.WriteLine($"User Pokemons: {JsonConvert.SerializeObject(userDTO.Pokemons)}");
+
+
+
+
             return battleUser;
 		}
         private void BattleSubscribe(BattleSession battleSession)

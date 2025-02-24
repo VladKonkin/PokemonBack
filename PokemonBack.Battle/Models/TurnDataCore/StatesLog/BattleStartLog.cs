@@ -10,9 +10,9 @@ namespace PokemonBack.Battle.Models.TurnDataCore.StatesLog
 	public class BattleStartLog : StateLogBase
 	{
 		[JsonProperty] public Guid BattleId { get; set; }
-		[JsonProperty] public Guid FirstPlayerId { get; set; }
-		[JsonProperty] public Guid SecondPlayerId { get; set; }
-		public BattleStartLog(Guid playerId,Guid secondPlayerId, Guid battleId) : base("BattleStart")
+		[JsonProperty] public string FirstPlayerId { get; set; }
+		[JsonProperty] public string SecondPlayerId { get; set; }
+		public BattleStartLog(string playerId, string secondPlayerId, Guid battleId) : base("BattleStart")
 		{
 			FirstPlayerId = playerId;
 			SecondPlayerId = secondPlayerId;

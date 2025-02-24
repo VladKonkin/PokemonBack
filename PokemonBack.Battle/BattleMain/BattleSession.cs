@@ -20,7 +20,7 @@ namespace PokemonBack.Battle.BattleMain
 
 		private BattleStateMachine _stateMachine;
 
-        public Action<Guid,StateLogBase> OnStateChangeAction;
+        public Action<Guid, StateLogBase> OnStateChangeAction;
         public Action<BattleSession> OnBattleEndAction;
         public Action OnTurnEndAction;
         

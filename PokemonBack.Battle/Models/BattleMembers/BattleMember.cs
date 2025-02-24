@@ -28,7 +28,7 @@ namespace PokemonBack.Battle.Models.BattleMembers
             PokemonDTO pokemon = _pokemonList.FirstOrDefault(p => p.IsAlive);
             return pokemon == null;
         }
-        public PokemonDTO GetPokemonById(Guid id)
+        public PokemonDTO GetPokemonById(string id)
         {
             return _pokemonList.FirstOrDefault(p => p.Id == id);
         }
@@ -36,7 +36,7 @@ namespace PokemonBack.Battle.Models.BattleMembers
         public bool IsReady() => _activeTurnAction != null;
         public virtual void ClearTurnAction() => _activeTurnAction = null;
         public abstract void SetTurnData(TurnAction turnData);
-        public abstract void SetMoveId(Guid? id);
+        public abstract void SetMoveId(string? id);
         public abstract void OnTurnEnd();
         public abstract void ChoosePokemon(PokemonDTO pokemonDTO);
         public virtual void MakeMove(BattleMember defender)
@@ -47,9 +47,9 @@ namespace PokemonBack.Battle.Models.BattleMembers
         {
             _activeTurnAction.Execute();
         }
-        public virtual Guid GetId()
+        public virtual string GetId()
         {
-            return Guid.Empty;
+            return "0";
         }
     }
 }

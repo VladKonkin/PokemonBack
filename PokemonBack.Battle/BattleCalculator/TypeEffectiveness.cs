@@ -1,9 +1,4 @@
-﻿using PokemonBack.ServiceDefaults.Data.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PokemonBack.ServiceDefaults.Data.DTO;
 
 namespace PokemonBack.Battle.BattleCalculator
 {
@@ -177,4 +172,5 @@ namespace PokemonBack.Battle.BattleCalculator
 			return 1.0; // Обычный урон
 		}
 	}
+	
 }

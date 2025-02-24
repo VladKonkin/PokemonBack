@@ -17,17 +17,15 @@ namespace PokemonBack.BotBattleAPI.BattleSignalR
 			_battleManager = battleManager;
 
 		}
-        public async Task ConnectToBattleRoom(Guid battleId,Guid userId)
+        public async Task ConnectToBattleRoom(Guid battleId,string userId)
         {
             var connectionId = Context.ConnectionId;
             await Groups.AddToGroupAsync(connectionId, battleId.ToString());
             var battle = await _battleHandler.ConnectToBattleRoom(battleId, userId);
 
-
-
 			await Clients.Group(battleId.ToString()).SendAsync("Connect", battle.FirstBattleMember.GetId(),battle.SecondBattleMember.GetId());
         }
-        public async Task CreateBattleRoom(Guid userId)
+        public async Task CreateBattleRoom(string userId)
         {
             var battleRoom = await _battleHandler.CreateBattleRoom(userId);
             Console.WriteLine(battleRoom + " BattleRoom");
@@ -41,7 +39,7 @@ namespace PokemonBack.BotBattleAPI.BattleSignalR
 
             await Clients.Group(battleId.ToString()).SendAsync("BattleRoomCreated",battleId);
         }
-        public async Task MakeMove(Guid battleId,Guid battleMemberId,Guid moveId)
+        public async Task MakeMove(string battleId, string battleMemberId, string moveId)
         {
             var battleMember = _battleHandler.GetBattleMemberById(battleMemberId);
             battleMember.SetMoveId(moveId);
@@ -57,9 +55,7 @@ namespace PokemonBack.BotBattleAPI.BattleSignalR
 
 			if(moveRequest.MoveId == null)
             {
-                Guid pokemonId = (Guid)moveRequest.NewPokemonId;
-
-				var switchData = new SwitchAction(pokemonId, battleMember);
+				var switchData = new SwitchAction(moveRequest.NewPokemonId, battleMember);
 
                 battleMember.SetTurnData(switchData);
             }

@@ -9,11 +9,11 @@ namespace PokemonBack.Battle.Models.TurnDataCore.StatesLog
 {
 	public class SwitchPokemonLog : StateLogBase
 	{
-		[JsonProperty] public Guid PlayerId { get; set; }
-		[JsonProperty] public Guid PreviousPokemonId { get; set; }
-		[JsonProperty] public Guid NewPokemonId { get; set; }
+		[JsonProperty] public string PlayerId { get; set; }
+		[JsonProperty] public string PreviousPokemonId { get; set; }
+		[JsonProperty] public string NewPokemonId { get; set; }
 
-		public SwitchPokemonLog(Guid playerId, Guid previousPokemonId, Guid newPokemonId)
+		public SwitchPokemonLog(string playerId, string previousPokemonId, string newPokemonId)
 			: base("SwitchPokemon")
 		{
 			PlayerId = playerId;

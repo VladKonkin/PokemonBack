@@ -9,11 +9,11 @@ namespace PokemonBack.Battle.Models.TurnDataCore.StatesLog
 {
 	public class ChoosePokemonLog : StateLogBase
 	{
-		[JsonProperty] public Guid FirstPlayerId { get; set; }
-		[JsonProperty] public Guid FirstPokemonId { get; set; }
-		[JsonProperty] public Guid SecondPlayerId { get; set; }
-		[JsonProperty] public Guid SecondPokemonId { get; set; }
-		public ChoosePokemonLog(Guid firstPlayerId,Guid firstPokemonId, Guid secondPlayerId, Guid secondPokemonId) : base("PokemonChoose")
+		[JsonProperty] public string FirstPlayerId { get; set; }
+		[JsonProperty] public string FirstPokemonId { get; set; }
+		[JsonProperty] public string SecondPlayerId { get; set; }
+		[JsonProperty] public string SecondPokemonId { get; set; }
+		public ChoosePokemonLog(string firstPlayerId, string firstPokemonId, string secondPlayerId, string secondPokemonId) : base("PokemonChoose")
 		{
 			FirstPlayerId = firstPlayerId;
 			FirstPokemonId = firstPokemonId;
