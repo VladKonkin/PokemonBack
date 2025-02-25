@@ -21,7 +21,7 @@ namespace PokemonBack.Battle.BattleMain
 		private BattleStateMachine _stateMachine;
 
         public Action<Guid, StateLogBase> OnStateChangeAction;
-        public Action<BattleSession> OnBattleEndAction;
+        public Func<BattleSession,Task> OnBattleEndAction;
         public Action OnTurnEndAction;
         
         public int TurnNumber { get; private set; }

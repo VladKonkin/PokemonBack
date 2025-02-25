@@ -2,6 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using PokemonBack.Battle.BattleMain;
 using PokemonBack.Battle.Models.BattleMembers;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using PokemonBack.ServiceDefaults.Data.Repositories;
 
 namespace PokemonBack.BotBattleAPI.Controllers
 {
@@ -11,10 +14,12 @@ namespace PokemonBack.BotBattleAPI.Controllers
 	{
 		private BattleHandler _battleHandler;
 		private IServiceScopeFactory _serviceScope;
-        public BotBattleController(BattleHandler battleHandler, IServiceScopeFactory serviceScope)
+		private BattleLogRepository _battleLogRepository;
+        public BotBattleController(BattleHandler battleHandler, IServiceScopeFactory serviceScope,BattleLogRepository battleLogRepository)
         {
             _battleHandler = battleHandler;
 			_serviceScope = serviceScope;
+			_battleLogRepository = battleLogRepository;
         }
 	
 		[HttpGet("GetUserData")]
@@ -29,12 +34,24 @@ namespace PokemonBack.BotBattleAPI.Controllers
 		[HttpGet("GetActiveBattles")]
 		public  IActionResult GetActiveBattles()
 		{
-			return Ok(_battleHandler.ActiveBattles);
+			var options = new JsonSerializerOptions
+			{
+				ReferenceHandler = ReferenceHandler.Preserve, 
+			};
+
+			string json = JsonSerializer.Serialize(_battleHandler.ActiveBattles, options);
+
+			return Ok(json);
 		}
 		[HttpGet("GetActiveBattleRooms")]
 		public IActionResult GetActiveBattleRooms()
 		{
 			return Ok(_battleHandler.ReadyBattles);
+		}
+		[HttpGet("GetBattleLogs")]
+		public IActionResult GetBattleLogs()
+		{
+			return Ok(_battleLogRepository.GetAllLog());
 		}
 	}
 }

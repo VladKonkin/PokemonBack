@@ -41,20 +41,22 @@ namespace PokemonBack.Battle.BattleMain
 			_battle.OnBattleEndAction -= OnBattleEnd;
 			_battle.OnTurnEndAction -= OnTurnEnd;
 		}
-		private void OnBattleEnd(BattleSession battle)
+		private Task OnBattleEnd(BattleSession battle)
 		{
 			UnSubscribeBattleActions();
-			ToJson();
+			return Task.CompletedTask;
+			//GetJsonLog();
 		}
 		private void OnTurnEnd()
 		{
 			_activeTurnLog = new TurnLog(_battle.TurnNumber);
 			_battleLogList.Add(_activeTurnLog);
 		}
-		private void ToJson()
+		public string GetJsonLog()
 		{
 			string battleLogJson = JsonConvert.SerializeObject(_battleLogList, Formatting.Indented);
-			Console.WriteLine(battleLogJson);
+
+			return battleLogJson;
 		}
 	}
 }

@@ -7,6 +7,8 @@ using Microsoft.Extensions.Logging;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
+using PokemonBack.ServiceDefaults.Data.Context;
+using PokemonBack.ServiceDefaults.Data.Repositories;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -17,21 +19,21 @@ public static class Extensions
 {
 	public static IHostApplicationBuilder AddDBServices(this IHostApplicationBuilder builder)
 	{
-		//builder.Services.AddDbContext<PokemonContext>(options =>
-		//{
-		//          var connectionString = "Host = localhost; Database = PokemonDb; Username = postgres; Password = password; Include Error Detail = true;";
-		//	//builder.Configuration.GetConnectionString("postgres");
-		//	options.UseNpgsql(connectionString); // Использование PostgreSQL
-		//});
-		//builder.Services.AddDbContext<PokemonContext>(options =>
-		//{
-		//	var connectionString = "Host=db; Database=PokemonDb; Username=postgres; Password=password; Include Error Detail=true;";
-		//	options.UseNpgsql(connectionString); // Использование PostgreSQL
-		//});
+        //builder.Services.AddDbContext<PokemonContext>(options =>
+        //{
+        //          var connectionString = "Host = localhost; Database = PokemonDb; Username = postgres; Password = password; Include Error Detail = true;";
+        //	//builder.Configuration.GetConnectionString("postgres");
+        //	options.UseNpgsql(connectionString); // Использование PostgreSQL
+        //});
+        builder.Services.AddDbContext<BattleLogDbContext>(options =>
+        {
+            var connectionString = "Host=db; Database=BattleLogDb; Username=postgres; Password=password; Include Error Detail=true;";
+            options.UseNpgsql(connectionString); // Использование PostgreSQL
+        });
 
-		//builder.Services.AddTransient<PokemonContext>();
-		//builder.Services.AddScoped<PokemonRepository>();
-		return builder;
+        //builder.Services.AddTransient<BattleLogDbContext>();
+        builder.Services.AddTransient<BattleLogRepository>();
+        return builder;
 	}
 	public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
     {

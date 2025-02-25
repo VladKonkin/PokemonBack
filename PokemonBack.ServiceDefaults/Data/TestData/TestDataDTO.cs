@@ -29,16 +29,16 @@ namespace PokemonBack.ServiceDefaults.Data.TestData
             UserDTO user = new UserDTO
             {
                 Id = userID,
-                UserName = "Test" + userID
+                UserName = "User" + userID
             };
             List<PokemonDTO> pokemonList = new List<PokemonDTO>();
 
             pokemonList.Add(GenerateTestPokemon(user, "00"));
-            pokemonList.Add(GenerateTestPokemon(user, "01"));
-            pokemonList.Add(GenerateTestPokemon(user, "02"));
-            pokemonList.Add(GenerateTestPokemon(user, "03"));
-            pokemonList.Add(GenerateTestPokemon(user, "04"));
-            pokemonList.Add(GenerateTestPokemon(user, "05"));
+            //pokemonList.Add(GenerateTestPokemon(user, "01"));
+            //pokemonList.Add(GenerateTestPokemon(user, "02"));
+            //pokemonList.Add(GenerateTestPokemon(user, "03"));
+            //pokemonList.Add(GenerateTestPokemon(user, "04"));
+            //pokemonList.Add(GenerateTestPokemon(user, "05"));
 
             user.Pokemons = pokemonList;
 			return user;

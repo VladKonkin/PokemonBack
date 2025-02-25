@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using PokemonBack.Battle.Models.BattleMembers;
 using PokemonBack.Battle.Models.TurnDataCore.StatesLog;
 using PokemonBack.ServiceDefaults.Data.DTO;
+using PokemonBack.ServiceDefaults.Data.Repositories;
 using PokemonBack.ServiceDefaults.Data.TestData;
 
 namespace PokemonBack.Battle.BattleMain
@@ -120,12 +122,14 @@ namespace PokemonBack.Battle.BattleMain
             Console.WriteLine("BattleHandler BattleInfoInvoke");
             BattleStateChanged?.Invoke(battleId, stateLogBase);
 		}
-        private void BattleEnd(BattleSession battleSession)
+        private async Task BattleEnd(BattleSession battleSession)
         {
-            Console.WriteLine($"BattleHandler End ");
+			using var scope = _serviceProvider.CreateScope();
+			var battleLogRepository = scope.ServiceProvider.GetRequiredService<BattleLogRepository>();
+            await battleLogRepository.AddNewBattleLog(battleSession.Id, battleSession.FirstBattleMember.GetId(), battleSession.SecondBattleMember.GetId(), battleSession.BattleLoger.GetJsonLog());
+			Console.WriteLine($"BattleHandler End ");
             _activeBattleList.Remove(battleSession);
 			BattleUnSubscribe(battleSession);
-
 		}
 
     }
