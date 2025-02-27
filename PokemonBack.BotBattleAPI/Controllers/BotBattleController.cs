@@ -46,12 +46,25 @@ namespace PokemonBack.BotBattleAPI.Controllers
 		[HttpGet("GetActiveBattleRooms")]
 		public IActionResult GetActiveBattleRooms()
 		{
-			return Ok(_battleHandler.ReadyBattles);
+			var options = new JsonSerializerOptions
+			{
+				ReferenceHandler = ReferenceHandler.Preserve,
+			};
+
+			string json = JsonSerializer.Serialize(_battleHandler.ReadyBattleRooms, options);
+
+			return Ok(json);
 		}
 		[HttpGet("GetBattleLogs")]
 		public IActionResult GetBattleLogs()
 		{
 			return Ok(_battleLogRepository.GetAllLog());
+		}
+		[HttpPost("CloseBattleRoomWithUser")]
+		public IActionResult CloseBattleRoomWithUser(string userId)
+		{
+			_battleHandler.CloseBattleRoom(userId);
+			return Ok();
 		}
 	}
 }

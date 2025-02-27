@@ -9,29 +9,29 @@ using System.Threading.Tasks;
 
 namespace PokemonBack.ServiceDefaults.Data.TestData
 {
-	public class TestDataDTO
+	public class TestDataUserModel
 	{
-        private List<UserDTO> _userList;
-        public TestDataDTO()
+        private List<UserModel> _userList;
+        public TestDataUserModel()
         {
-            _userList = new List<UserDTO>()
+            _userList = new List<UserModel>()
             {
                 GenerateTestUser("1"),
                 GenerateTestUser("2")
             };
         }
-        public UserDTO GetUserById(string id)
+        public UserModel GetUserById(string id)
         {
             return _userList.FirstOrDefault(u => u.Id == id);
         }
-        private UserDTO GenerateTestUser(string userID)
+        private UserModel GenerateTestUser(string userID)
         {
-            UserDTO user = new UserDTO
+            UserModel user = new UserModel
             {
                 Id = userID,
                 UserName = "User" + userID
             };
-            List<PokemonDTO> pokemonList = new List<PokemonDTO>();
+            List<PokemonModel> pokemonList = new List<PokemonModel>();
 
             pokemonList.Add(GenerateTestPokemon(user, "00"));
             //pokemonList.Add(GenerateTestPokemon(user, "01"));
@@ -44,10 +44,10 @@ namespace PokemonBack.ServiceDefaults.Data.TestData
 			return user;
         }
 
-        private PokemonDTO GenerateTestPokemon(UserDTO user,string id)
+        private PokemonModel GenerateTestPokemon(UserModel user,string id)
         {
 			Random rnd = new Random();
-			var pokemon1 = new PokemonDTO
+			var pokemon1 = new PokemonModel
 			{
 				Id = id + user.Id,
 				Level = 10,
@@ -61,7 +61,7 @@ namespace PokemonBack.ServiceDefaults.Data.TestData
 				User = user
 			};
             pokemon1.CurrentHp = pokemon1.MaxHp;
-            List<MoveDTO> moveList = new List<MoveDTO>();
+            List<MoveModel> moveList = new List<MoveModel>();
 
             moveList.Add(GenerateTestMoves(pokemon1, pokemon1.Id+"00"));
             moveList.Add(GenerateTestMoves(pokemon1, pokemon1.Id+"01"));
@@ -73,10 +73,10 @@ namespace PokemonBack.ServiceDefaults.Data.TestData
             return pokemon1;
 		}
 
-        private MoveDTO GenerateTestMoves(PokemonDTO pokemon,string id)
+        private MoveModel GenerateTestMoves(PokemonModel pokemon,string id)
         {
             Random rnd = new Random();
-            var move = new MoveDTO
+            var move = new MoveModel
             {
                 Id = id,
                 Power = 10 + rnd.Next(30),

@@ -2,7 +2,7 @@
 
 namespace PokemonBack.ServiceDefaults.Data.DTO
 {
-	public class MoveDTO
+	public class MoveModel
 	{
 		//public Guid Id { get;  set; }
 		[JsonProperty] public string Id { get;  set; }
@@ -12,9 +12,9 @@ namespace PokemonBack.ServiceDefaults.Data.DTO
 		[JsonProperty] public int Accuracy { get; set; }
 		[JsonProperty] public int MaxPP { get; set; }
 		[JsonProperty] public int CurrentPP { get; set; }
-		[JsonIgnore] public PokemonDTO PokemonDTO { get; set; }
+		[JsonIgnore] public PokemonModel PokemonDTO { get; set; }
 
-        public MoveDTO()
+        public MoveModel()
         {
             
         }

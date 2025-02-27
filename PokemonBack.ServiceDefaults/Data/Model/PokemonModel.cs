@@ -2,7 +2,7 @@
 
 namespace PokemonBack.ServiceDefaults.Data.DTO
 {
-	public class PokemonDTO
+	public class PokemonModel
 	{
 		//public Guid Id { get;  set; }
 		[JsonProperty] public string Id { get;  set; }
@@ -16,10 +16,10 @@ namespace PokemonBack.ServiceDefaults.Data.DTO
 		[JsonProperty] public int Speed { get; set; }
 		[JsonProperty] public bool IsAlive => CurrentHp > 0;
 		[JsonProperty] public PokemonType Element { get; set; }
-		[JsonProperty] public List<MoveDTO> Moves { get; set; }
-		[JsonIgnore] public UserDTO User { get; set; }
+		[JsonProperty] public List<MoveModel> Moves { get; set; }
+		[JsonIgnore] public UserModel User { get; set; }
 
-        public PokemonDTO()
+        public PokemonModel()
         {
             
         }
@@ -39,7 +39,7 @@ namespace PokemonBack.ServiceDefaults.Data.DTO
 			//	.Select(m => new MoveDTO(m))
 			//	.ToList();
    //     }
-		public void SetUser(UserDTO user)
+		public void SetUser(UserModel user)
 		{
 			User = user;
 		}

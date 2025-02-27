@@ -10,7 +10,7 @@ namespace PokemonBack.Battle.Models.TurnDataCore
 {
 	public class SwitchAction : TurnAction
 	{
-		public PokemonDTO NewPokemon { get; private set; }
+		public PokemonModel NewPokemon { get; private set; }
 		private string PokemonId { get; set; }
 		private BattleMember _battleMember;
 		public override string Description => $"Покемон сменяется на {NewPokemon}";

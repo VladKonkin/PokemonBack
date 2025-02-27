@@ -12,8 +12,8 @@ namespace PokemonBack.Battle.Models.BattleMembers
 {
     public class UserBattleMember : BattleMember
 	{
-		private UserDTO _user;
-        public UserBattleMember(UserDTO user)
+		private UserModel _user;
+        public UserBattleMember(UserModel user)
         {
 			_user = user;
             _pokemonList = user.Pokemons;
@@ -38,7 +38,7 @@ namespace PokemonBack.Battle.Models.BattleMembers
 			
 		}
 
-		public override void ChoosePokemon(PokemonDTO pokemonDTO)
+		public override void ChoosePokemon(PokemonModel pokemonDTO)
 		{
 			_activePokemon = pokemonDTO;
 		}

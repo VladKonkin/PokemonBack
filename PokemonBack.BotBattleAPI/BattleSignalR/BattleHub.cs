@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using PokemonBack.Battle.BattleMain;
 using PokemonBack.Battle.Models.TurnDataCore;
 using PokemonBack.Battle.Models.TurnDataCore.StatesLog;
+using PokemonBack.BotBattleAPI.DTO;
+using PokemonBack.BotBattleAPI.DTO.ValidationConfigurattion;
+using PokemonBack.BotBattleAPI.DTO.Validator;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace PokemonBack.BotBattleAPI.BattleSignalR
@@ -11,23 +15,47 @@ namespace PokemonBack.BotBattleAPI.BattleSignalR
 	{
         private BattleHandler _battleHandler;
         private BattleManager _battleManager;
-        public BattleHub(BattleHandler battleHandler,BattleManager battleManager)
+
+        private BattleHubValidator _battleHubValidator;
+
+        public BattleHub(BattleHandler battleHandler,BattleManager battleManager,BattleHubValidator battleHubValidator)
         {
             _battleHandler = battleHandler;
 			_battleManager = battleManager;
-
+            _battleHubValidator = battleHubValidator;
 		}
-        public async Task ConnectToBattleRoom(Guid battleId,string userId)
+        public async Task ConnectToBattleRoom(ConnectToBattleDTO connetToBattleDTO)
         {
-            var connectionId = Context.ConnectionId;
-            await Groups.AddToGroupAsync(connectionId, battleId.ToString());
-            var battle = await _battleHandler.ConnectToBattleRoom(battleId, userId);
+            var validator = _battleHubValidator.GetConnectToBattleValidator();
+			var validationResult = await validator.ValidateAsync(connetToBattleDTO);
 
-			await Clients.Group(battleId.ToString()).SendAsync("Connect", battle.FirstBattleMember.GetId(),battle.SecondBattleMember.GetId());
+            if (!validationResult.IsValid)
+            {
+				await Clients.Caller.SendAsync("ReceiveError", validationResult.Errors.Select(e => e.ErrorMessage));
+				return;
+			}
+
+
+            var connectionId = Context.ConnectionId;
+            await Groups.AddToGroupAsync(connectionId, connetToBattleDTO.BattleId.ToString());
+            var battle = await _battleHandler.ConnectToBattleRoom(connetToBattleDTO.BattleId, connetToBattleDTO.UserId);
+
+			await Clients.Group(connetToBattleDTO.BattleId.ToString()).SendAsync("Connect", battle.FirstBattleMember.GetId(),battle.SecondBattleMember.GetId());
         }
-        public async Task CreateBattleRoom(string userId)
+        public async Task CreateBattleRoom(CreateBattleRoomDTO createBattleRoomDTO)
         {
-            var battleRoom = await _battleHandler.CreateBattleRoom(userId);
+			var validator = _battleHubValidator.GetCreateBattleRoomValidator();
+			var validationResult = await validator.ValidateAsync(createBattleRoomDTO);
+
+			if (!validationResult.IsValid)
+			{
+				await Clients.Caller.SendAsync("ReceiveError", validationResult.Errors.Select(e => e.ErrorMessage));
+				return;
+			}
+
+
+
+			var battleRoom = await _battleHandler.CreateBattleRoom(createBattleRoomDTO.UserId);
             Console.WriteLine(battleRoom + " BattleRoom");
             var battleId = battleRoom.BattleID;
 
@@ -39,19 +67,19 @@ namespace PokemonBack.BotBattleAPI.BattleSignalR
 
             await Clients.Group(battleId.ToString()).SendAsync("BattleRoomCreated",battleId);
         }
-        public async Task MakeMove(string battleId, string battleMemberId, string moveId)
-        {
-            var battleMember = _battleHandler.GetBattleMemberById(battleMemberId);
-            battleMember.SetMoveId(moveId);
-            await Clients.Group(battleId.ToString()).SendAsync("Move was Set",moveId);
-        }
-		public async Task SendTurn(JsonMoveRequest moveRequest)
+		public async Task SendTurn(TurnRequestDTO moveRequest)
 		{
-			if (moveRequest == null)
+			var validator = _battleHubValidator.GetTurnRequestValidator();
+			var validationResult = await validator.ValidateAsync(moveRequest);
+
+			if (!validationResult.IsValid)
 			{
-				throw new ArgumentNullException(nameof(moveRequest));
+				await Clients.Caller.SendAsync("ReceiveError", validationResult.Errors.Select(e => e.ErrorMessage));
+				return;
 			}
-            var battleMember = _battleHandler.GetBattleMemberById(moveRequest.PlayerId);
+
+
+			var battleMember = _battleHandler.GetBattleMemberById(moveRequest.PlayerId);
 
 			if(moveRequest.MoveId == null)
             {
@@ -70,11 +98,11 @@ namespace PokemonBack.BotBattleAPI.BattleSignalR
         {
 			await Clients.All.SendAsync("Test", "Test");
 		}
-        public async Task OnBattleStateChange(Guid battleId,StateLogBase stateLog)
-        {
-            var turnJson = JsonConvert.SerializeObject(stateLog);
+		public override Task OnDisconnectedAsync(Exception? exception)
+		{
 
-            await Clients.Group(battleId.ToString()).SendAsync(turnJson);
-        }
-    }
+
+			return base.OnDisconnectedAsync(exception);
+		}
+	}
 }

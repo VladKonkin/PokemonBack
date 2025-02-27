@@ -2,13 +2,13 @@
 
 namespace PokemonBack.ServiceDefaults.Data.DTO
 {
-	public class UserDTO
+	public class UserModel
 	{
 		//public Guid Id { get;  set; }
 		[JsonProperty] public string Id { get;  set; }
 		[JsonProperty] public string UserName { get;  set; }
-		[JsonProperty] public List<PokemonDTO> Pokemons { get; set; }
-        public UserDTO()
+		[JsonProperty] public List<PokemonModel> Pokemons { get; set; }
+        public UserModel()
         {
             
         }

@@ -15,20 +15,20 @@ namespace PokemonBack.Battle.Models.BattleMembers
         protected BattleSession _battleSession;
 		
 		protected TurnAction _activeTurnAction;
-        protected List<PokemonDTO> _pokemonList;
+        protected List<PokemonModel> _pokemonList;
 
-        protected PokemonDTO _activePokemon;
+        protected PokemonModel _activePokemon;
 
         public TurnAction ActiveTurnAction => _activeTurnAction;
-        public PokemonDTO ActivePokemon => _activePokemon;
+        public PokemonModel ActivePokemon => _activePokemon;
         public Action BattleTurnSetAction { get; set; }
         
         public bool CantСontinueBattle()
         {
-            PokemonDTO pokemon = _pokemonList.FirstOrDefault(p => p.IsAlive);
+            PokemonModel pokemon = _pokemonList.FirstOrDefault(p => p.IsAlive);
             return pokemon == null;
         }
-        public PokemonDTO GetPokemonById(string id)
+        public PokemonModel GetPokemonById(string id)
         {
             return _pokemonList.FirstOrDefault(p => p.Id == id);
         }
@@ -38,7 +38,7 @@ namespace PokemonBack.Battle.Models.BattleMembers
         public abstract void SetTurnData(TurnAction turnData);
         public abstract void SetMoveId(string? id);
         public abstract void OnTurnEnd();
-        public abstract void ChoosePokemon(PokemonDTO pokemonDTO);
+        public abstract void ChoosePokemon(PokemonModel pokemonDTO);
         public virtual void MakeMove(BattleMember defender)
         {
             _activeTurnAction.Execute(defender);

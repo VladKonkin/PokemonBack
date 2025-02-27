@@ -15,8 +15,8 @@ namespace PokemonBack.Battle.Models.TurnDataCore
 		public int Priority { get; protected set; }
 		public abstract void Execute(BattleMember target);
 		public abstract void Execute();
-		public virtual PokemonDTO? Pokemon => null;
-		public virtual MoveDTO? Move => null;
+		public virtual PokemonModel? Pokemon => null;
+		public virtual MoveModel? Move => null;
 		public virtual BattleMember? BattleMember => null;
 	}
 }

@@ -15,7 +15,7 @@ namespace PokemonBack.Battle.BattleMain
 
         private IServiceProvider _serviceProvider;
 
-        public List<BattleRoom> ReadyBattles => _battleRoomList;
+        public List<BattleRoom> ReadyBattleRooms => _battleRoomList;
         public List<BattleSession> ActiveBattles => _activeBattleList;
         public Action<Guid, StateLogBase> BattleStateChanged;
         public Action<BattleSession> OnBattleEnd;
@@ -26,17 +26,13 @@ namespace PokemonBack.Battle.BattleMain
 
 			_serviceProvider = serviceProvider;
         }
-        public string Test()
-        {
-			//var test = _pokemonRepository.GetAllAsync<PokemonEntity>().Result;
-			return "test";
-		}
         public BattleSession GetBattleById(Guid battleId)
         {
             return _activeBattleList.FirstOrDefault(b => b.Id == battleId);
         }
         public async Task<BattleRoom> CreateBattleRoom(string userId)
         {
+            
 			var battleUser = await CreateBattleMemberById(userId);
 
             var battleRoom = new BattleRoom(battleUser);
@@ -77,6 +73,20 @@ namespace PokemonBack.Battle.BattleMain
             if (battleMember == null) throw new Exception("BattleMember not found");
             return battleMember;
         }
+        public void CloseBattleRoom(string userId)
+        {
+            Console.WriteLine($"Close. UserId: {userId}");
+            Console.WriteLine($"Close. Count: {_battleRoomList.Count}");
+            
+            var battleRoom = _battleRoomList.FirstOrDefault(r => r.FirstBattleMember.GetId() == userId);
+            Console.WriteLine($"Close. Battle Room: {battleRoom}");
+            if(battleRoom == null)
+            {
+                Console.WriteLine($"Close. User not found");
+                return;
+            }
+            _battleRoomList.Remove(battleRoom);
+        }
         private BattleSession CreateBattle(BattleRoom battleRoom)
         {
 			_battleRoomList.Remove(battleRoom);
@@ -89,7 +99,7 @@ namespace PokemonBack.Battle.BattleMain
 		}
         private async Task<UserBattleMember> CreateBattleMemberById(string userId)
         {
-            TestDataDTO test = new TestDataDTO();
+            TestDataUserModel test = new TestDataUserModel();
             var userDTO = test.GetUserById(userId);
 
 

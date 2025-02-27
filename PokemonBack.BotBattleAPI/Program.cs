@@ -1,6 +1,7 @@
 using PokemonBack.Battle.BattleMain;
 using PokemonBack.Battle.Extensions;
 using PokemonBack.BotBattleAPI.BattleSignalR;
+using PokemonBack.BotBattleAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ builder.AddDBServices();
 builder.AddBattleServices();
 builder.Services.AddSingleton<BattleManager>();
 builder.Services.AddSignalR();
+builder.AddValidatorServices();
 
 builder.Services.AddCors(options =>
 {

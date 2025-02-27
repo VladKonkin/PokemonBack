@@ -1,6 +1,6 @@
-﻿namespace PokemonBack.BotBattleAPI.BattleSignalR
+﻿namespace PokemonBack.BotBattleAPI.DTO
 {
-	public class JsonMoveRequest
+	public class TurnRequestDTO
 	{
 		public string BattleId { get; set; }
 		public string PlayerId { get; set; }
