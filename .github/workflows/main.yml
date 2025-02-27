@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /usr/src/vlad
-            git pull origin main
+            cd /usr/src/vlad-pokemon
+            git pull origin
             chmod +x deploy.sh
             ./deploy.sh
