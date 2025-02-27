@@ -60,6 +60,11 @@ namespace PokemonBack.BotBattleAPI.Controllers
 		{
 			return Ok(_battleLogRepository.GetAllLog());
 		}
+		[HttpGet("Test")]
+		public IActionResult Test()
+		{
+			return Ok("Test");
+		}
 		[HttpPost("CloseBattleRoomWithUser")]
 		public IActionResult CloseBattleRoomWithUser(string userId)
 		{
