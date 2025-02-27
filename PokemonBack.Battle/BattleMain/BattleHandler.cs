@@ -32,7 +32,7 @@ namespace PokemonBack.Battle.BattleMain
         }
         public async Task<BattleRoom> CreateBattleRoom(string userId)
         {
-            
+            //
 			var battleUser = await CreateBattleMemberById(userId);
 
             var battleRoom = new BattleRoom(battleUser);
