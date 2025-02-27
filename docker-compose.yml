@@ -6,20 +6,40 @@ services:
       dockerfile: PokemonBack.BotBattleAPI/Dockerfile
     environment:
       - ASPNETCORE_URLS=http://+:5000
-      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Username=postgres;Password=yourpassword;Database=BattleLogDb
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Username=postgres;Password=yourpassword;Database=pokemon
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://dashboard:18889
     depends_on:
       - db
     ports:
       - "5000:5000"
+    networks:
+      - isolated
+      - public
 
   db:
     image: postgres:latest
+    container_name: db
     environment:
       POSTGRES_DB: BattleLogDb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+    networks:
+      - isolated
+
+  dashboard:
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:latest
+    container_name: dashboard
     ports:
-      - "5432:5432"
+      - "18888:18888"
+      - "18889:18889"
+    networks:
+      - isolated
+      - public
 
 volumes:
   pgdata:
+
+networks:
+  isolated:
+   internal: true
+  public:
