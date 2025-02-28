@@ -55,7 +55,7 @@ namespace PokemonBack.BotBattleAPI.Controllers
 		{
 			var settings = new JsonSerializerSettings
 			{
-				ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+				PreserveReferencesHandling = PreserveReferencesHandling.Objects,
 				Formatting = Formatting.Indented
 			};
 
@@ -68,7 +68,7 @@ namespace PokemonBack.BotBattleAPI.Controllers
 		{
 			var settings = new JsonSerializerSettings
 			{
-				ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+				PreserveReferencesHandling = PreserveReferencesHandling.Objects,
 				Formatting = Formatting.Indented
 			};
 
