@@ -71,5 +71,11 @@ namespace PokemonBack.BotBattleAPI.Controllers
 			_battleHandler.CloseBattleRoom(userId);
 			return Ok();
 		}
+		[HttpPost("CloseBattleWithUser")]
+		public IActionResult CloseBattleWithUser(string userId)
+		{
+			_battleHandler.CloseBattle(userId);
+			return Ok();
+		}
 	}
 }

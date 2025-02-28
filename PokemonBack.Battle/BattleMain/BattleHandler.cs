@@ -87,7 +87,21 @@ namespace PokemonBack.Battle.BattleMain
             }
             _battleRoomList.Remove(battleRoom);
         }
-        private BattleSession CreateBattle(BattleRoom battleRoom)
+		public void CloseBattle(string userId)
+		{
+			Console.WriteLine($"Close.Battle UserId: {userId}");
+			Console.WriteLine($"Close.Battle Count: {_battleRoomList.Count}");
+
+			var battle = _activeBattleList.FirstOrDefault(r => r.FirstBattleMember.GetId() == userId);
+			Console.WriteLine($"Close.Battle Battle: {battle}");
+			if (battle == null)
+			{
+				Console.WriteLine($"Close.Battle User not found");
+				return;
+			}
+			_activeBattleList.Remove(battle);
+		}
+		private BattleSession CreateBattle(BattleRoom battleRoom)
         {
 			_battleRoomList.Remove(battleRoom);
             var battle = new BattleSession(battleRoom.BattleID, battleRoom.FirstBattleMember, battleRoom.SecondBattleMember);
