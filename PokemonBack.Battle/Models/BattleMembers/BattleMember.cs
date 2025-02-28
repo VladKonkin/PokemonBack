@@ -21,6 +21,7 @@ namespace PokemonBack.Battle.Models.BattleMembers
 
         public TurnAction ActiveTurnAction => _activeTurnAction;
         public PokemonModel ActivePokemon => _activePokemon;
+        public List<PokemonModel> PokemonList => _pokemonList;
         public Action BattleTurnSetAction { get; set; }
         
         public bool CantСontinueBattle()

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using PokemonBack.Battle.Models.BattleMembers;
 using PokemonBack.Battle.Models.TurnDataCore.StatesLog;
@@ -13,18 +14,20 @@ namespace PokemonBack.Battle.BattleMain
         private List<BattleRoom> _battleRoomList;
         private List<BattleSession> _activeBattleList;
 
+        private ILogger<BattleHandler> _logger;
         private IServiceProvider _serviceProvider;
 
         public List<BattleRoom> ReadyBattleRooms => _battleRoomList;
         public List<BattleSession> ActiveBattles => _activeBattleList;
         public Action<Guid, StateLogBase> BattleStateChanged;
         public Action<BattleSession> OnBattleEnd;
-        public BattleHandler(IServiceProvider serviceProvider)
+        public BattleHandler(IServiceProvider serviceProvider, ILogger<BattleHandler> logger) 
         {
             _battleRoomList = new List<BattleRoom>();
 			_activeBattleList = new List<BattleSession>();
 
 			_serviceProvider = serviceProvider;
+            _logger = logger;
         }
         public BattleSession GetBattleById(Guid battleId)
         {
@@ -32,13 +35,17 @@ namespace PokemonBack.Battle.BattleMain
         }
         public async Task<BattleRoom> CreateBattleRoom(string userId)
         {
-            //
+            
 			var battleUser = await CreateBattleMemberById(userId);
 
             var battleRoom = new BattleRoom(battleUser);
             _battleRoomList.Add(battleRoom);
-            Console.WriteLine(_battleRoomList.Count + " Create Count");
-            Console.WriteLine(battleRoom + " Create battleRoom");
+
+            _logger.LogInformation(_battleRoomList.Count + " Create Count");
+            _logger.LogInformation(battleRoom + " Create battleRoom");
+
+			//Console.WriteLine(_battleRoomList.Count + " Create Count");
+            //Console.WriteLine(battleRoom + " Create battleRoom");
             return battleRoom;
         }
         public async Task<BattleSession> ConnectToFirstBattleRoom(string userId)
@@ -56,7 +63,8 @@ namespace PokemonBack.Battle.BattleMain
 
 			if (room == null)
 			{
-				Console.WriteLine("Battle room not found!");
+				_logger.LogError("Battle room not found!");
+				//Console.WriteLine("Battle room not found!");
 				return null; 
 			}
 
@@ -82,7 +90,7 @@ namespace PokemonBack.Battle.BattleMain
             Console.WriteLine($"Close. Battle Room: {battleRoom}");
             if(battleRoom == null)
             {
-                Console.WriteLine($"Close. User not found");
+				_logger.LogError("User not found");
                 return;
             }
             _battleRoomList.Remove(battleRoom);
@@ -96,7 +104,7 @@ namespace PokemonBack.Battle.BattleMain
 			Console.WriteLine($"Close.Battle Battle: {battle}");
 			if (battle == null)
 			{
-				Console.WriteLine($"Close.Battle User not found");
+				_logger.LogError("Battle not found ");
 				return;
 			}
 			_activeBattleList.Remove(battle);

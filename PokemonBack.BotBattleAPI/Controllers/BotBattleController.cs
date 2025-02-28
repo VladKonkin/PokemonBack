@@ -5,6 +5,8 @@ using PokemonBack.Battle.Models.BattleMembers;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using PokemonBack.ServiceDefaults.Data.Repositories;
+using PokemonBack.BotBattleAPI.DTO;
+using Newtonsoft.Json;
 
 namespace PokemonBack.BotBattleAPI.Controllers
 {
@@ -15,11 +17,13 @@ namespace PokemonBack.BotBattleAPI.Controllers
 		private BattleHandler _battleHandler;
 		private IServiceScopeFactory _serviceScope;
 		private BattleLogRepository _battleLogRepository;
-        public BotBattleController(BattleHandler battleHandler, IServiceScopeFactory serviceScope,BattleLogRepository battleLogRepository)
+		private ILogger<BotBattleController> _logger;
+        public BotBattleController(BattleHandler battleHandler, IServiceScopeFactory serviceScope,BattleLogRepository battleLogRepository, ILogger<BotBattleController> logger)
         {
             _battleHandler = battleHandler;
 			_serviceScope = serviceScope;
 			_battleLogRepository = battleLogRepository;
+			_logger = logger;
         }
 	
 		[HttpGet("GetUserData")]
@@ -28,30 +32,47 @@ namespace PokemonBack.BotBattleAPI.Controllers
 			var battle = _battleHandler.GetBattleById(battleId);
 
 			var battleMember = (UserBattleMember)(battle.FirstBattleMember.GetId() == userId ? battle.FirstBattleMember : battle.SecondBattleMember);
-			
-			return Ok(battleMember.GetTestUserJson());
+
+			var userInfo = new UserInfoDTO
+			{
+				UserId = battleMember.GetId(),
+				Pokemons = battleMember.PokemonList
+			};
+
+			var settings = new JsonSerializerSettings
+			{
+				ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+				Formatting = Formatting.Indented
+			};
+
+			string json = JsonConvert.SerializeObject(userInfo, settings);
+
+
+			return Ok(json);
 		}
 		[HttpGet("GetActiveBattles")]
 		public  IActionResult GetActiveBattles()
 		{
-			var options = new JsonSerializerOptions
+			var settings = new JsonSerializerSettings
 			{
-				ReferenceHandler = ReferenceHandler.Preserve, 
+				ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+				Formatting = Formatting.Indented
 			};
 
-			string json = JsonSerializer.Serialize(_battleHandler.ActiveBattles, options);
+			string json = JsonConvert.SerializeObject(_battleHandler.ActiveBattles, settings);
 
 			return Ok(json);
 		}
 		[HttpGet("GetActiveBattleRooms")]
 		public IActionResult GetActiveBattleRooms()
 		{
-			var options = new JsonSerializerOptions
+			var settings = new JsonSerializerSettings
 			{
-				ReferenceHandler = ReferenceHandler.Preserve,
+				ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+				Formatting = Formatting.Indented
 			};
 
-			string json = JsonSerializer.Serialize(_battleHandler.ReadyBattleRooms, options);
+			string json = JsonConvert.SerializeObject(_battleHandler.ReadyBattleRooms, settings);
 
 			return Ok(json);
 		}

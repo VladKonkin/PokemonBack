@@ -12,8 +12,7 @@ namespace PokemonBack.BotBattleAPI.DTO.ValidationConfigurattion
 
             RuleFor(x => x.UserId)
                 .NotEmpty().WithMessage("UserId is empty")
-				.Must(userId => NotInBattle(userId))
-			.WithMessage("Already in battle");
+				.Must(userId => NotInBattle(userId)).WithMessage("Already in battle");
 
 			RuleFor(x => x.BattleId)
                 .NotEmpty().WithMessage("BattleId is empty");
