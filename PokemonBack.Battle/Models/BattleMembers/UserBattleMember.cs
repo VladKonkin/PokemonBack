@@ -12,7 +12,7 @@ namespace PokemonBack.Battle.Models.BattleMembers
 {
     public class UserBattleMember : BattleMember
 	{
-		private UserModel _user;
+		[JsonProperty] private UserModel _user;
         public UserBattleMember(UserModel user)
         {
 			_user = user;

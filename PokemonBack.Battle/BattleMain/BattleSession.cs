@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PokemonBack.Battle.Models.TurnDataCore.StatesLog;
+using Newtonsoft.Json;
 
 namespace PokemonBack.Battle.BattleMain
 {
@@ -16,13 +17,13 @@ namespace PokemonBack.Battle.BattleMain
 
         public BattleMember FirstBattleMember { get; private set; }
 		public BattleMember SecondBattleMember { get; private set; }
-        public BattleLoger BattleLoger {get;}
+		[JsonIgnore] public BattleLoger BattleLoger {get;}
 
-		private BattleStateMachine _stateMachine;
+		[JsonIgnore] private BattleStateMachine _stateMachine;
 
-        public Action<Guid, StateLogBase> OnStateChangeAction;
-        public Func<BattleSession,Task> OnBattleEndAction;
-        public Action OnTurnEndAction;
+		[JsonIgnore] public Action<Guid, StateLogBase> OnStateChangeAction;
+		[JsonIgnore] public Func<BattleSession,Task> OnBattleEndAction;
+        [JsonIgnore] public Action OnTurnEndAction;
         
         public int TurnNumber { get; private set; }
         public BattleSession(Guid id, BattleMember firstBattleMember,BattleMember secondBattleMember)

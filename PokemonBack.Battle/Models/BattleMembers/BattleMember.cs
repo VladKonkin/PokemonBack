@@ -6,23 +6,24 @@ using System.Threading.Tasks;
 using PokemonBack.Battle.BattleMain;
 using PokemonBack.ServiceDefaults.Data.DTO;
 using PokemonBack.Battle.Models.TurnDataCore;
+using Newtonsoft.Json;
 
 
 namespace PokemonBack.Battle.Models.BattleMembers
 {
     public abstract class BattleMember
     {
-        protected BattleSession _battleSession;
+        [JsonIgnore] protected BattleSession _battleSession;
 		
-		protected TurnAction _activeTurnAction;
-        protected List<PokemonModel> _pokemonList;
+		[JsonIgnore] protected TurnAction _activeTurnAction;
+        [JsonProperty] protected List<PokemonModel> _pokemonList;
 
-        protected PokemonModel _activePokemon;
+		[JsonProperty] protected PokemonModel _activePokemon;
 
-        public TurnAction ActiveTurnAction => _activeTurnAction;
-        public PokemonModel ActivePokemon => _activePokemon;
-        public List<PokemonModel> PokemonList => _pokemonList;
-        public Action BattleTurnSetAction { get; set; }
+		[JsonIgnore] public TurnAction ActiveTurnAction => _activeTurnAction;
+		[JsonIgnore] public PokemonModel ActivePokemon => _activePokemon;
+		[JsonIgnore] public List<PokemonModel> PokemonList => _pokemonList;
+		[JsonIgnore] public Action BattleTurnSetAction { get; set; }
         
         public bool CantСontinueBattle()
         {
