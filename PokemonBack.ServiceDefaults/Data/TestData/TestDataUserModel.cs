@@ -33,7 +33,7 @@ namespace PokemonBack.ServiceDefaults.Data.TestData
             };
             List<PokemonModel> pokemonList = new List<PokemonModel>();
 
-            pokemonList.Add(GenerateTestPokemon(user, "00"));
+            pokemonList.Add(GenerateTestPokemon(user.Id, "00"));
             //pokemonList.Add(GenerateTestPokemon(user, "01"));
             //pokemonList.Add(GenerateTestPokemon(user, "02"));
             //pokemonList.Add(GenerateTestPokemon(user, "03"));
@@ -44,12 +44,12 @@ namespace PokemonBack.ServiceDefaults.Data.TestData
 			return user;
         }
 
-        private PokemonModel GenerateTestPokemon(UserModel user,string id)
+        public PokemonModel GenerateTestPokemon(string userId,string id)
         {
 			Random rnd = new Random();
 			var pokemon1 = new PokemonModel
 			{
-				Id = id + user.Id,
+				Id = id + userId,
 				Level = 10,
 				MaxHp = 100 + rnd.Next(50),
 				Attack = 50 + rnd.Next(30),
@@ -57,8 +57,7 @@ namespace PokemonBack.ServiceDefaults.Data.TestData
 				Defence = 30 + rnd.Next(30),
 				SpDefence = 35 + rnd.Next(30),
 				Speed = 45 + rnd.Next(30),
-				Element = (PokemonType)rnd.Next(17),
-				User = user
+				PokemonType = (PokemonType)rnd.Next(17)
 			};
             pokemon1.CurrentHp = pokemon1.MaxHp;
             List<MoveModel> moveList = new List<MoveModel>();
@@ -83,7 +82,7 @@ namespace PokemonBack.ServiceDefaults.Data.TestData
                 Accuracy = 20 + rnd.Next(50),
                 MaxPP = 100,
                 CurrentPP = 100,
-                Element = (PokemonType)rnd.Next(17),
+                AttackType = (PokemonType)rnd.Next(17),
                 PokemonDTO = pokemon
             };
 

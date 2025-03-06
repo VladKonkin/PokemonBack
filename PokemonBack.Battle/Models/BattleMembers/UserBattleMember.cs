@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PokemonBack.Battle.Models.BattleMembers
 {
-    public class UserBattleMember : BattleMember
+	public class UserBattleMember : BattleMember
 	{
 		[JsonProperty] private UserModel _user;
         public UserBattleMember(UserModel user)
@@ -24,11 +24,6 @@ namespace PokemonBack.Battle.Models.BattleMembers
 			_activeTurnAction = turnData;
 			BattleTurnSetAction?.Invoke();
 		}
-		public override void ClearTurnAction()
-		{
-            Console.WriteLine($"Next Turn user id {_user.Id}");
-			base.ClearTurnAction();
-		}
 		public string GetTestUserJson()
 		{
 			return JsonConvert.SerializeObject(_user);
@@ -38,10 +33,6 @@ namespace PokemonBack.Battle.Models.BattleMembers
 			
 		}
 
-		public override void ChoosePokemon(PokemonModel pokemonDTO)
-		{
-			_activePokemon = pokemonDTO;
-		}
 		public override string GetId()
 		{
 			return _user.Id;
@@ -49,14 +40,15 @@ namespace PokemonBack.Battle.Models.BattleMembers
 
 		public override void SetMoveId(string? id)
 		{
-            Console.WriteLine("ActivePokId " + ActivePokemon.Id);
-            Console.WriteLine("ActivePokMoveList " + ActivePokemon.Moves.Count);
 			var move = ActivePokemon.Moves.FirstOrDefault(x => x.Id == id);
-            Console.WriteLine("Move " + move);
 			var turn = new MoveAction(ActivePokemon,move);
-            Console.WriteLine("Turn " + turn);
 			SetTurnData(turn);
 		}
 
+		public override void OnNextTurnStart()
+		{
+			Console.WriteLine($"Next Turn user id {_user.Id}");
+			base.OnNextTurnStart();
+		}
 	}
 }

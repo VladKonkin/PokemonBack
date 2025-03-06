@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using PokemonBack.Battle.BattleMain;
-using PokemonBack.Battle.Models.BattleMembers;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using PokemonBack.ServiceDefaults.Data.Repositories;
-using PokemonBack.BotBattleAPI.DTO;
 using Newtonsoft.Json;
+using PokemonBack.Battle.BattleMain;
+using PokemonBack.Battle.Models.TurnDataCore;
+using PokemonBack.BotBattleAPI.DTO;
+using PokemonBack.BotBattleAPI.DTO.ValidationConfigurattion;
+using PokemonBack.BotBattleAPI.DTO.Validator;
 
 namespace PokemonBack.BotBattleAPI.Controllers
 {
@@ -14,89 +12,53 @@ namespace PokemonBack.BotBattleAPI.Controllers
 	[Route("[controller]")]
 	public class BotBattleController : Controller
 	{
-		private BattleHandler _battleHandler;
-		private IServiceScopeFactory _serviceScope;
-		private BattleLogRepository _battleLogRepository;
-		private ILogger<BotBattleController> _logger;
-        public BotBattleController(BattleHandler battleHandler, IServiceScopeFactory serviceScope,BattleLogRepository battleLogRepository, ILogger<BotBattleController> logger)
+        private BattleHandler _battleHandler;
+		private TurnRequestValidator _turnRequestValidator;
+        public BotBattleController(BattleHandler battleHandler, TurnRequestValidator turnRequestValidator)
         {
             _battleHandler = battleHandler;
-			_serviceScope = serviceScope;
-			_battleLogRepository = battleLogRepository;
-			_logger = logger;
+			_turnRequestValidator = turnRequestValidator;
         }
-	
-		[HttpGet("GetUserData")]
-		public IActionResult GetUserInfoById(Guid battleId,string userId)
-		{
-			var battle = _battleHandler.GetBattleById(battleId);
 
-			var battleMember = (UserBattleMember)(battle.FirstBattleMember.GetId() == userId ? battle.FirstBattleMember : battle.SecondBattleMember);
+		[HttpGet("CreateBattle")]
+        public async Task<IActionResult> CreateBattle(string userId)
+        {
+            var battle = await _battleHandler.CreateBotBattle(userId);
 
-			var userInfo = new UserInfoDTO
-			{
-				UserId = battleMember.GetId(),
-				Pokemons = battleMember.PokemonList
-			};
-
-			var settings = new JsonSerializerSettings
-			{
-				ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-				Formatting = Formatting.Indented
-			};
-
-			string json = JsonConvert.SerializeObject(userInfo, settings);
-
-
-			return Ok(json);
-		}
-		[HttpGet("GetActiveBattles")]
-		public  IActionResult GetActiveBattles()
-		{
 			var settings = new JsonSerializerSettings
 			{
 				PreserveReferencesHandling = PreserveReferencesHandling.Objects,
 				Formatting = Formatting.Indented
 			};
 
-			string json = JsonConvert.SerializeObject(_battleHandler.ActiveBattles, settings);
+			string json = JsonConvert.SerializeObject(battle, settings);
 
 			return Ok(json);
-		}
-		[HttpGet("GetActiveBattleRooms")]
-		public IActionResult GetActiveBattleRooms()
-		{
-			var settings = new JsonSerializerSettings
+        }
+		[HttpPost("SendTurn")]
+        public async Task<IActionResult> SendTurn(TurnRequestDTO moveRequest)
+        {
+			var validationResult = await _turnRequestValidator.ValidateAsync(moveRequest);
+
+			if (!validationResult.IsValid)
 			{
-				PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-				Formatting = Formatting.Indented
-			};
+				return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
+			}
 
-			string json = JsonConvert.SerializeObject(_battleHandler.ReadyBattleRooms, settings);
+			var battleMember = _battleHandler.GetBattleMemberById(moveRequest.PlayerId);
 
-			return Ok(json);
-		}
-		[HttpGet("GetBattleLogs")]
-		public IActionResult GetBattleLogs()
-		{
-			return Ok(_battleLogRepository.GetAllLog());
-		}
-		[HttpGet("Test")]
-		public IActionResult Test()
-		{
-			return Ok("Test");
-		}
-		[HttpPost("CloseBattleRoomWithUser")]
-		public IActionResult CloseBattleRoomWithUser(string userId)
-		{
-			_battleHandler.CloseBattleRoom(userId);
+			if (moveRequest.MoveId == null | moveRequest.MoveId == "")
+			{
+				var switchData = new SwitchAction(moveRequest.NewPokemonId, battleMember);
+
+				battleMember.SetTurnData(switchData);
+			}
+			else
+			{
+				battleMember.SetMoveId(moveRequest.MoveId);
+			}
+
 			return Ok();
-		}
-		[HttpPost("CloseBattleWithUser")]
-		public IActionResult CloseBattleWithUser(string userId)
-		{
-			_battleHandler.CloseBattle(userId);
-			return Ok();
-		}
-	}
+        }
+    }
 }

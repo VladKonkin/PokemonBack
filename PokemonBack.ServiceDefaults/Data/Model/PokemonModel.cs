@@ -6,6 +6,7 @@ namespace PokemonBack.ServiceDefaults.Data.DTO
 	{
 		//public Guid Id { get;  set; }
 		[JsonProperty] public string Id { get;  set; }
+		[JsonProperty] public string Name { get;  set; }
 		[JsonProperty] public int Level { get; set; }
 		[JsonProperty] public int MaxHp { get; set; }
 		[JsonProperty] public int CurrentHp { get; set; }
@@ -15,9 +16,9 @@ namespace PokemonBack.ServiceDefaults.Data.DTO
 		[JsonProperty] public int SpDefence { get; set; }
 		[JsonProperty] public int Speed { get; set; }
 		[JsonProperty] public bool IsAlive => CurrentHp > 0;
-		[JsonProperty] public PokemonType Element { get; set; }
+		[JsonProperty] public PokemonType PokemonType { get; set; }
+		[JsonProperty] public PokemonType SecondPokemonType { get; set; }
 		[JsonProperty] public List<MoveModel> Moves { get; set; }
-		[JsonIgnore] public UserModel User { get; set; }
 
         public PokemonModel()
         {
@@ -39,9 +40,5 @@ namespace PokemonBack.ServiceDefaults.Data.DTO
 			//	.Select(m => new MoveDTO(m))
 			//	.ToList();
    //     }
-		public void SetUser(UserModel user)
-		{
-			User = user;
-		}
     }
 }

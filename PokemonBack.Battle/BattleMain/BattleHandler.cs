@@ -21,6 +21,7 @@ namespace PokemonBack.Battle.BattleMain
         public List<BattleSession> ActiveBattles => _activeBattleList;
         public Action<Guid, StateLogBase> BattleStateChanged;
         public Action<BattleSession> OnBattleEnd;
+
         public BattleHandler(IServiceProvider serviceProvider, ILogger<BattleHandler> logger) 
         {
             _battleRoomList = new List<BattleRoom>();
@@ -48,6 +49,18 @@ namespace PokemonBack.Battle.BattleMain
             //Console.WriteLine(battleRoom + " Create battleRoom");
             return battleRoom;
         }
+        public async Task<BattleSession> CreateBotBattle(string userId)
+        {
+			var battleMember = await CreateBattleMemberById(userId);
+			var botMember = new BotBattleMember();
+
+
+			var battle = new BattleSession(Guid.NewGuid(), battleMember, botMember);
+            _activeBattleList.Add(battle);
+			BattleSubscribe(battle);
+			return battle;
+
+		}
         public async Task<BattleSession> ConnectToFirstBattleRoom(string userId)
         {
            var battleUser = await CreateBattleMemberById(userId);
@@ -83,11 +96,8 @@ namespace PokemonBack.Battle.BattleMain
         }
         public void CloseBattleRoom(string userId)
         {
-            Console.WriteLine($"Close. UserId: {userId}");
-            Console.WriteLine($"Close. Count: {_battleRoomList.Count}");
-            
             var battleRoom = _battleRoomList.FirstOrDefault(r => r.FirstBattleMember.GetId() == userId);
-            Console.WriteLine($"Close. Battle Room: {battleRoom}");
+            
             if(battleRoom == null)
             {
 				_logger.LogError("User not found");
@@ -97,11 +107,8 @@ namespace PokemonBack.Battle.BattleMain
         }
 		public void CloseBattle(string userId)
 		{
-			Console.WriteLine($"Close.Battle UserId: {userId}");
-			Console.WriteLine($"Close.Battle Count: {_battleRoomList.Count}");
-
 			var battle = _activeBattleList.FirstOrDefault(r => r.FirstBattleMember.GetId() == userId);
-			Console.WriteLine($"Close.Battle Battle: {battle}");
+			
 			if (battle == null)
 			{
 				_logger.LogError("Battle not found ");
@@ -119,6 +126,7 @@ namespace PokemonBack.Battle.BattleMain
 
 			return battle;
 		}
+       
         private async Task<UserBattleMember> CreateBattleMemberById(string userId)
         {
             TestDataUserModel test = new TestDataUserModel();
@@ -130,11 +138,6 @@ namespace PokemonBack.Battle.BattleMain
 
 
             var battleUser = new UserBattleMember(userDTO);
-
-            Console.WriteLine($"User: {JsonConvert.SerializeObject(userDTO)}");
-            Console.WriteLine($"User Pokemons: {JsonConvert.SerializeObject(userDTO.Pokemons)}");
-
-
 
 
             return battleUser;
@@ -159,7 +162,7 @@ namespace PokemonBack.Battle.BattleMain
 			using var scope = _serviceProvider.CreateScope();
 			var battleLogRepository = scope.ServiceProvider.GetRequiredService<BattleLogRepository>();
             await battleLogRepository.AddNewBattleLog(battleSession.Id, battleSession.FirstBattleMember.GetId(), battleSession.SecondBattleMember.GetId(), battleSession.BattleLoger.GetJsonLog());
-			Console.WriteLine($"BattleHandler End ");
+			
             _activeBattleList.Remove(battleSession);
 			BattleUnSubscribe(battleSession);
 		}

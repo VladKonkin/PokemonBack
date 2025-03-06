@@ -7,7 +7,7 @@ namespace PokemonBack.ServiceDefaults.Data.DTO
 		//public Guid Id { get;  set; }
 		[JsonProperty] public string Id { get;  set; }
 
-		[JsonProperty] public PokemonType Element { get; set; }
+		[JsonProperty] public PokemonType AttackType { get; set; }
 		[JsonProperty] public int Power { get; set; }
 		[JsonProperty] public int Accuracy { get; set; }
 		[JsonProperty] public int MaxPP { get; set; }

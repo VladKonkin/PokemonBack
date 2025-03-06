@@ -21,8 +21,8 @@ namespace PokemonBack.Battle.BattleMain.StateMachine.States
 
 		public override void OnStart()
         {
-			_battle.FirstBattleMember.ClearTurnAction();
-			_battle.SecondBattleMember.ClearTurnAction();
+			_battle.FirstBattleMember.OnNextTurnStart();
+			_battle.SecondBattleMember.OnNextTurnStart();
 
 			StateLog = new TurnStartLog(_battle.TurnNumber);
 			_battle.OnStateChange(StateLog);

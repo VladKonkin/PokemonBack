@@ -28,7 +28,14 @@ namespace PokemonBack.Battle.Models.TurnDataCore
 		
 		public override void Execute(BattleMember target)
 		{
-			double typeModifier = TypeEffectiveness.GetEffectiveness(PokemonDTO.Element, target.ActivePokemon.Element);
+			double typeModifier = TypeEffectiveness.GetEffectiveness(MoveDTO.AttackType, target.ActivePokemon.PokemonType);
+			if(target.ActivePokemon.SecondPokemonType != null)
+			{
+				typeModifier += TypeEffectiveness.GetEffectiveness(MoveDTO.AttackType, target.ActivePokemon.SecondPokemonType);
+			}
+
+					
+
 			int damage = (int)(MoveDTO.Power * typeModifier);
 
 			target.ActivePokemon.CurrentHp -= damage;

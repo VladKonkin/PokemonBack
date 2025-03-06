@@ -42,6 +42,10 @@ namespace PokemonBack.Battle.BattleMain
         public void OnTurnEnd()
         {
             TurnNumber++;
+
+            FirstBattleMember.OnTurnEnd();
+            SecondBattleMember.OnTurnEnd();
+
             OnTurnEndAction?.Invoke();
 
 		}
