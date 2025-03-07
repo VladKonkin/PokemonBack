@@ -25,16 +25,19 @@ namespace PokemonBack.Battle.Models.TurnDataCore
 			MoveDTO = move;
 		}
 
+		protected double GetTypeModificator(PokemonModel target)
+		{
+			double typeModificator = TypeEffectiveness.GetEffectiveness(MoveDTO.AttackType, target.PokemonType);
+			if (target.SecondPokemonType != null)
+			{
+				typeModificator *= TypeEffectiveness.GetEffectiveness(MoveDTO.AttackType, target.SecondPokemonType);
+			}
+			return typeModificator;
+		}
 		
 		public override void Execute(BattleMember target)
 		{
-			double typeModifier = TypeEffectiveness.GetEffectiveness(MoveDTO.AttackType, target.ActivePokemon.PokemonType);
-			if(target.ActivePokemon.SecondPokemonType != null)
-			{
-				typeModifier += TypeEffectiveness.GetEffectiveness(MoveDTO.AttackType, target.ActivePokemon.SecondPokemonType);
-			}
-
-					
+			double typeModifier = GetTypeModificator(target.ActivePokemon);
 
 			int damage = (int)(MoveDTO.Power * typeModifier);
 

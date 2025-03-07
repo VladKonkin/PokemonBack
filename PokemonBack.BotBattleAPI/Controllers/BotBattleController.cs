@@ -46,16 +46,28 @@ namespace PokemonBack.BotBattleAPI.Controllers
 			}
 
 			var battleMember = _battleHandler.GetBattleMemberById(moveRequest.PlayerId);
+			string? validationError = null; 
 
-			if (moveRequest.MoveId == null | moveRequest.MoveId == "")
+
+			Action<string> onValidationError = (error) =>
+			{
+				validationError = error; 
+			};
+
+			if (string.IsNullOrEmpty(moveRequest.MoveId))
 			{
 				var switchData = new SwitchAction(moveRequest.NewPokemonId, battleMember);
 
-				battleMember.SetTurnData(switchData);
+				battleMember.SetTurnData(switchData, onValidationError);
 			}
 			else
 			{
-				battleMember.SetMoveId(moveRequest.MoveId);
+				battleMember.SetMoveId(moveRequest.MoveId, onValidationError);
+			}
+
+			if (validationError != null)
+			{
+				return BadRequest(new { error = validationError });
 			}
 
 			return Ok();

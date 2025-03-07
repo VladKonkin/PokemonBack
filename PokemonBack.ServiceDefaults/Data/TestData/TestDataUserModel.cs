@@ -83,7 +83,6 @@ namespace PokemonBack.ServiceDefaults.Data.TestData
                 MaxPP = 100,
                 CurrentPP = 100,
                 AttackType = (PokemonType)rnd.Next(17),
-                PokemonDTO = pokemon
             };
 
             return move;

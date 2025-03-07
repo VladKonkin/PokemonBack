@@ -37,11 +37,11 @@ namespace PokemonBack.Battle.Models.BattleMembers
         public virtual void SetBattle(BattleSession battleSession) => _battleSession = battleSession;
         public bool IsReady() => _activeTurnAction != null;
         protected virtual void ClearTurnAction() => _activeTurnAction = null;
-        public abstract void SetTurnData(TurnAction turnData);
-        public abstract void SetMoveId(string? id);
         public abstract void OnTurnEnd();
         public virtual void OnNextTurnStart() => ClearTurnAction();
         public virtual void ChoosePokemon(PokemonModel pokemonDTO) => _activePokemon = pokemonDTO;
+        public abstract void SetTurnData(TurnAction turnData, Action<string> callBack);
+        public abstract void SetMoveId(string? id, Action<string> callBack);
         public virtual void MakeMove(BattleMember defender)
         {
             _activeTurnAction.Execute(defender);

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PokemonBack.ServiceDefaults.Data.Model;
 
 namespace PokemonBack.ServiceDefaults.Data.DTO
 {
@@ -7,6 +8,7 @@ namespace PokemonBack.ServiceDefaults.Data.DTO
 		//public Guid Id { get;  set; }
 		[JsonProperty] public string Id { get;  set; }
 		[JsonProperty] public string Name { get;  set; }
+		[JsonProperty] public PokemonAbillityModel Ability { get;  set; }
 		[JsonProperty] public int Level { get; set; }
 		[JsonProperty] public int MaxHp { get; set; }
 		[JsonProperty] public int CurrentHp { get; set; }
@@ -18,6 +20,7 @@ namespace PokemonBack.ServiceDefaults.Data.DTO
 		[JsonProperty] public bool IsAlive => CurrentHp > 0;
 		[JsonProperty] public PokemonType PokemonType { get; set; }
 		[JsonProperty] public PokemonType SecondPokemonType { get; set; }
+		[JsonProperty] public MoveCategory MoveCategory { get;  set; }
 		[JsonProperty] public List<MoveModel> Moves { get; set; }
 
         public PokemonModel()
@@ -41,4 +44,10 @@ namespace PokemonBack.ServiceDefaults.Data.DTO
 			//	.ToList();
    //     }
     }
+}
+public enum MoveCategory
+{
+	Physical,
+	Special,
+	Status
 }

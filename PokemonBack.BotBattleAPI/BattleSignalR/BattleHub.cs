@@ -80,17 +80,29 @@ namespace PokemonBack.BotBattleAPI.BattleSignalR
 
 
 			var battleMember = _battleHandler.GetBattleMemberById(moveRequest.PlayerId);
+			string? validationError = null;
 
-			if(moveRequest.MoveId == null)
+
+			Action<string> onValidationError = (error) =>
+			{
+				validationError = error;
+			};
+
+			if (moveRequest.MoveId == null)
             {
 				var switchData = new SwitchAction(moveRequest.NewPokemonId, battleMember);
 
-                battleMember.SetTurnData(switchData);
+                battleMember.SetTurnData(switchData, onValidationError);
             }
             else
             {
-                battleMember.SetMoveId(moveRequest.MoveId);
+                battleMember.SetMoveId(moveRequest.MoveId, onValidationError);
             }
+
+			if (validationError != null)
+			{
+				await Clients.Caller.SendAsync("ReceiveError", validationError);
+			}
 
 			await Clients.Group(moveRequest.BattleId.ToString()).SendAsync("TurnSet");
 		}

@@ -29,21 +29,21 @@ namespace PokemonBack.Battle.Models.BattleMembers
 		{
             Console.WriteLine("Next Turn Start");
 			base.OnNextTurnStart();
-			SetMoveId(_activePokemon.Moves[_rnd.Next(4)].Id);
+			SetMoveId(_activePokemon.Moves[_rnd.Next(4)].Id,(error) => Console.WriteLine(error));
 		}
 
 		public override void OnTurnEnd()
 		{
 			
 		}
-		public override void SetMoveId(string? id)
+		public override void SetMoveId(string? id, Action<string> callBack)
 		{
 			var move = ActivePokemon.Moves.FirstOrDefault(x => x.Id == id);
 			var turn = new MoveAction(ActivePokemon, move);
-			SetTurnData(turn);
+			SetTurnData(turn, callBack);
 		}
 
-		public override void SetTurnData(TurnAction turnData)
+		public override void SetTurnData(TurnAction turnData, Action<string> callBack)
 		{
 			_activeTurnAction = turnData;
 			BattleTurnSetAction?.Invoke();

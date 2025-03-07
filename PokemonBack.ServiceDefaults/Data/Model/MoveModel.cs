@@ -12,7 +12,6 @@ namespace PokemonBack.ServiceDefaults.Data.DTO
 		[JsonProperty] public int Accuracy { get; set; }
 		[JsonProperty] public int MaxPP { get; set; }
 		[JsonProperty] public int CurrentPP { get; set; }
-		[JsonIgnore] public PokemonModel PokemonDTO { get; set; }
 
         public MoveModel()
         {
